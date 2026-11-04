@@ -1,2 +1,2 @@
-# mi-tiendita-
+# mi tiendita
 tienda online
