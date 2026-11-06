@@ -1,6 +1,6 @@
-// Service worker de Mi Tiendita (PWA). Subí la versión para forzar actualización.
+// Service worker de Mi Tiendita Digital (PWA). Subí la versión para forzar actualización.
 // v3: caché del catálogo (red primero), imágenes vistas (caché primero, con límite) y assets con hash.
-const VERSION = 'mt-v3'
+const VERSION = 'mt-v4'
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './data/products.json']
 const IMG_CACHE = VERSION + '-img'
 const STATIC_CACHE = VERSION + '-static'
