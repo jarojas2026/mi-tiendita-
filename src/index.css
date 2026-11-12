@@ -1,0 +1,113 @@
+@import "tailwindcss";
+@import "@fontsource-variable/plus-jakarta-sans";
+@import "@fontsource-variable/fraunces";
+
+/* Modo oscuro por clase (.dark en <html>), respetando la preferencia del sistema al inicio */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ============ Identidad "Mi Tiendita · Rivas" ============
+   Verde finca (cafetales y potreros de Rivas), tierra (barro y madera), acento mango cálido. */
+@theme {
+  --color-brand-50: #eef6ef;
+  --color-brand-100: #d5ead8;
+  --color-brand-200: #a9d3b0;
+  --color-brand-300: #77b683;
+  --color-brand-400: #4b9a5b;
+  --color-brand-500: #2f7f43;
+  --color-brand-600: #236a37;
+  --color-brand-700: #1c562d;
+  --color-brand-800: #164424;
+  --color-brand-900: #0f2f19;
+
+  --color-earth-50: #faf4ec;
+  --color-earth-100: #f2e4d1;
+  --color-earth-200: #e3c7a3;
+  --color-earth-300: #cfa274;
+  --color-earth-400: #b77f4f;
+  --color-earth-500: #9a6438;
+  --color-earth-600: #7d4f2c;
+  --color-earth-700: #623d23;
+  --color-earth-800: #48301d;
+  --color-earth-900: #2e1f13;
+
+  --color-accent-50: #fff6e8;
+  --color-accent-100: #ffe9c6;
+  --color-accent-200: #ffd38d;
+  --color-accent-300: #ffbd55;
+  --color-accent-400: #f9a62b;
+  --color-accent-500: #e88a12;
+  --color-accent-600: #c06a0b;
+  --color-accent-700: #96500d;
+
+  --font-sans: "Plus Jakarta Sans Variable", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-display: "Fraunces Variable", Georgia, "Times New Roman", serif;
+
+  --shadow-card: 0 1px 2px rgb(46 31 19 / 0.06), 0 4px 14px -6px rgb(46 31 19 / 0.12);
+  --shadow-lift: 0 2px 4px rgb(46 31 19 / 0.08), 0 16px 32px -12px rgb(46 31 19 / 0.28);
+
+  --animate-shimmer: shimmer 1.4s linear infinite;
+  --animate-fade-up: fade-up 0.35s ease-out both;
+  --animate-pop: pop 0.25s ease-out both;
+  @keyframes shimmer { from { background-position: -200% 0 } to { background-position: 200% 0 } }
+  @keyframes fade-up { from { opacity: 0; transform: translateY(8px) } to { opacity: 1; transform: none } }
+  @keyframes pop { 0% { transform: scale(0.9) } 60% { transform: scale(1.06) } 100% { transform: scale(1) } }
+}
+
+/* Colores semánticos (cambian con el modo oscuro) */
+@theme inline {
+  --color-bg: var(--mt-bg);
+  --color-surface: var(--mt-surface);
+  --color-surface-2: var(--mt-surface-2);
+  --color-ink: var(--mt-ink);
+  --color-muted: var(--mt-muted);
+  --color-line: var(--mt-line);
+}
+:root {
+  --mt-bg: #faf6ef;
+  --mt-surface: #ffffff;
+  --mt-surface-2: #f3ece1;
+  --mt-ink: #231a12;
+  --mt-muted: #6b5d50;
+  --mt-line: #e9dfd1;
+  color-scheme: light;
+}
+.dark {
+  --mt-bg: #11140f;
+  --mt-surface: #1a1f18;
+  --mt-surface-2: #232a21;
+  --mt-ink: #f3efe7;
+  --mt-muted: #b2a999;
+  --mt-line: #2f372c;
+  color-scheme: dark;
+}
+
+html, body { background: var(--mt-bg); color: var(--mt-ink); }
+body { -webkit-tap-highlight-color: transparent; font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
+h1, h2, .font-display { font-family: var(--font-display); font-optical-sizing: auto; letter-spacing: -0.01em; }
+
+/* Foco visible y accesible para teclado */
+/* :where() = especificidad 0, así outline-none en un componente puede ganarle */
+:where(:focus-visible) { outline: 3px solid var(--color-accent-400); outline-offset: 2px; border-radius: 10px; }
+
+/* Skeleton */
+.skeleton { background: linear-gradient(90deg, var(--mt-surface-2) 25%, var(--mt-line) 37%, var(--mt-surface-2) 63%); background-size: 400% 100%; animation: var(--animate-shimmer); }
+
+/* Scroll horizontal sin barra (chips, carruseles) */
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.snap-x-mandatory { scroll-snap-type: x mandatory; }
+
+/* Respeta "reducir movimiento" */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+
+/* El header es sticky y la barra inferior fija: que los campos enfocados no queden debajo. */
+html { scroll-padding-top: 150px; scroll-padding-bottom: 90px; }
+input, select, textarea, button { scroll-margin-top: 150px; scroll-margin-bottom: 90px; }
+textarea { resize: vertical; }
+html, body { overflow-x: clip; }
+
+/* Leaflet: que los controles respeten el modo oscuro y no tapen el header */
+.leaflet-container { font-family: var(--font-sans); border-radius: 16px; z-index: 0; }
+.dark .leaflet-tile { filter: brightness(0.75) contrast(1.1) saturate(0.8); }

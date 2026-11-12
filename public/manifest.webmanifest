@@ -1,0 +1,23 @@
+{
+  "name": "Mi Tiendita Digital — Pérez Zeledón",
+  "short_name": "Mi Tiendita",
+  "description": "Pulpería y bazar digital con entrega en Pérez Zeledón. Huevos Palmital, lácteos de la finca y más de 1.000 productos.",
+  "id": "./",
+  "lang": "es-CR",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f4f5f2",
+  "theme_color": "#146c37",
+  "categories": ["shopping", "food"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Productos de finca", "url": "./#/catalogo?cat=finca" },
+    { "name": "Mi carrito", "url": "./#/carrito" },
+    { "name": "Mis pedidos", "url": "./#/cuenta/pedidos" }
+  ]
+}

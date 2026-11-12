@@ -1,0 +1,13 @@
+# Cloudflare Worker del Asistente Tiendita (plan Workers Free: 100.000 solicitudes/día, sin tarjeta).
+name = "mi-tiendita-ia"
+main = "groq-proxy.js"
+compatibility_date = "2025-01-01"
+
+[vars]
+# Dominios que pueden usar el proxy (separados por coma). Agregá tu dominio propio si lo tenés.
+ALLOWED_ORIGINS = "https://jarojas2026.github.io"
+# Modelo de Groq. Revisá los vigentes en https://console.groq.com/docs/models
+MODEL = "llama-3.1-8b-instant"
+
+# La clave NO va aquí. Se guarda como secreto:
+#   npx wrangler secret put GROQ_API_KEY

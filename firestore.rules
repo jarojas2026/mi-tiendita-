@@ -1,0 +1,154 @@
+rules_version = '2';
+// Mi Tiendita Digital — reglas de Firestore v5 (proyecto mi-tiendita-digital-b9835, plan Spark).
+// Pegar completo en Consola Firebase > Firestore Database > Reglas > Publicar.
+//  - Admins: correos fijos en isAdmin() (cuenta Google con correo verificado).
+//  - orders: el cliente con cuenta crea y lee SOLO los suyos; el invitado (sin cuenta) solo puede crear.
+//            Solo el admin cambia estado/historial. Nadie borra.
+//  - tracking/{orderId}_{token}: copia pública mínima para el enlace de seguimiento. Solo `get` (hay que
+//            conocer id + token secreto); no se puede listar. Se crea en el mismo lote que el pedido.
+//  - products (ajustes de precio/stock), settings (zonas, tarifas, horario): lectura pública, escritura admin.
+//  - Todo lo demás: cerrado.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- utilidades ----------
+    function signedIn() { return request.auth != null; }
+    function isAdmin() {
+      return signedIn()
+        && request.auth.token.email_verified == true
+        && request.auth.token.email.lower() in ['jarojas800@gmail.com', 'pulperiaybazardigital@gmail.com'];
+    }
+    function isStr(v, min, max) { return v is string && v.size() >= min && v.size() <= max; }
+    function isNum(v, min, max) { return v is number && v >= min && v <= max; }
+    function optStr(d, k, max) { return !(k in d) || isStr(d[k], 0, max); }
+    function optNum(d, k, max) { return !(k in d) || isNum(d[k], 0, max); }
+    function optNumNull(d, k, max) { return !(k in d) || d[k] == null || isNum(d[k], 0, max); }
+    function optBool(d, k) { return !(k in d) || d[k] is bool; }
+    function estados() { return ['nuevo', 'confirmado', 'en camino', 'entregado', 'cancelado']; }
+
+    // ---------- pedidos ----------
+    function validOrder(d) {
+      return d.keys().hasOnly(['codigo', 'userId', 'email', 'guest', 'cliente', 'items', 'subtotal', 'envio', 'total',
+                               'adelanto', 'hayBajoPedido', 'hayPrecioPorConfirmar', 'zonaId', 'zonaNombre', 'direccion',
+                               'ubicacion', 'distanciaKm', 'fecha', 'franja', 'pago', 'entrega', 'sinpeRef', 'notas',
+                               'estado', 'historial', 'creado', 'actualizado', 'trackToken'])
+        && d.keys().hasAll(['codigo', 'userId', 'guest', 'cliente', 'items', 'total', 'zonaId', 'fecha', 'franja',
+                            'pago', 'estado', 'historial', 'creado', 'trackToken'])
+        && isStr(d.codigo, 3, 24)
+        && d.guest is bool
+        && d.cliente is map && d.cliente.keys().hasOnly(['nombre', 'telefono'])
+        && isStr(d.cliente.nombre, 1, 80) && isStr(d.cliente.telefono, 8, 20)
+        && d.items is list && d.items.size() > 0 && d.items.size() <= 100
+        && isNum(d.total, 0, 10000000)
+        && optNum(d, 'subtotal', 10000000) && optNum(d, 'adelanto', 10000000) && optNumNull(d, 'envio', 100000)
+        && optBool(d, 'hayBajoPedido') && optBool(d, 'hayPrecioPorConfirmar')
+        && isStr(d.zonaId, 1, 40) && optStr(d, 'zonaNombre', 80) && optStr(d, 'direccion', 500)
+        && optStr(d, 'notas', 1000) && optStr(d, 'sinpeRef', 40) && optStr(d, 'email', 120)
+        && isStr(d.fecha, 10, 10) && isStr(d.franja, 1, 60)
+        && d.pago in ['sinpe', 'efectivo']
+        && (!('entrega' in d) || d.entrega in ['domicilio', 'retiro'])
+        && d.estado == 'nuevo'
+        && d.historial is list && d.historial.size() == 1 && d.historial[0].estado == 'nuevo'
+        && isStr(d.creado, 10, 40) && optStr(d, 'actualizado', 40)
+        && isStr(d.trackToken, 16, 64)
+        && (!('ubicacion' in d) || (d.ubicacion is map
+             && isNum(d.ubicacion.lat, -90, 90) && isNum(d.ubicacion.lng, -180, 180)))
+        && optNum(d, 'distanciaKm', 1000);
+    }
+
+    match /orders/{orderId} {
+      // Dueño (cliente con cuenta) o admin. Los pedidos de invitado tienen userId '' y no los lee nadie más que el admin.
+      allow get, list: if isAdmin() || (signedIn() && resource.data.userId == request.auth.uid);
+      allow create: if validOrder(request.resource.data) && (
+          (request.resource.data.guest == false && signedIn() && request.resource.data.userId == request.auth.uid)
+          || (request.resource.data.guest == true && request.resource.data.userId == ''));
+      // Solo el admin cambia el estado (siempre agregando una entrada al historial con la hora)
+      allow update: if isAdmin()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['estado', 'historial', 'actualizado', 'stockDescontado'])
+        && request.resource.data.estado in estados()
+        && request.resource.data.historial is list
+        && request.resource.data.historial.size() == resource.data.historial.size() + 1
+        && (!('stockDescontado' in request.resource.data) || request.resource.data.stockDescontado is bool);
+      allow delete: if false;
+    }
+
+    // ---------- seguimiento público (id del documento = {orderId}_{token}) ----------
+    function validTracking(d) {
+      return d.keys().hasOnly(['codigo', 'estado', 'historial', 'creado', 'actualizado', 'fecha', 'franja', 'total',
+                               'subtotal', 'envio', 'adelanto', 'hayBajoPedido', 'zonaId', 'zonaNombre', 'entrega',
+                               'pago', 'items'])
+        && (!('estado' in d) || d.estado in estados())
+        && (!('items' in d) || (d.items is list && d.items.size() <= 100));
+    }
+    function trackingDeSuPedido(tid) {
+      return tid.split('_').size() == 2
+        && getAfter(/databases/$(database)/documents/orders/$(tid.split('_')[0])).data.trackToken == tid.split('_')[1];
+    }
+    match /tracking/{tid} {
+      allow get: if true;
+      allow list: if isAdmin();
+      allow create: if validTracking(request.resource.data) && (
+          isAdmin() || (request.resource.data.estado == 'nuevo' && trackingDeSuPedido(tid)));
+      allow update: if isAdmin() && validTracking(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    // ---------- productos: ajustes del admin sobre el catálogo (precio, stock, oferta, ocultar) ----------
+    function validProduct(d) {
+      return d.keys().hasOnly(['nombre', 'precio', 'precioAntes', 'disponibilidad', 'oferta', 'oculto', 'stock', 'actualizado'])
+        && (!('nombre' in d) || isStr(d.nombre, 1, 200))
+        && optNumNull(d, 'precio', 100000000) && optNumNull(d, 'precioAntes', 100000000)
+        && (!('disponibilidad' in d) || d.disponibilidad in ['Bajo pedido', 'En tienda', 'Agotado'])
+        && optBool(d, 'oferta') && optBool(d, 'oculto')
+        && optNumNull(d, 'stock', 1000000)
+        && optStr(d, 'actualizado', 40);
+    }
+    match /products/{productId} {
+      allow read: if true;
+      allow create, update: if isAdmin() && validProduct(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    // ---------- ajustes de la tienda: zonas/tarifas, franjas, horario, stock bajo ----------
+    match /settings/{settingId} {
+      allow read: if true;
+      allow create, update: if isAdmin() && settingId == 'tienda'
+        && request.resource.data.keys().hasOnly(['zonas', 'franjas', 'horario', 'stockBajo', 'actualizado'])
+        && request.resource.data.zonas is list && request.resource.data.zonas.size() <= 60
+        && request.resource.data.franjas is list && request.resource.data.franjas.size() >= 1 && request.resource.data.franjas.size() <= 12
+        && isStr(request.resource.data.horario, 0, 200)
+        && isNum(request.resource.data.stockBajo, 0, 100000)
+        && optStr(request.resource.data, 'actualizado', 40);
+      allow delete: if false;
+    }
+
+    // ---------- perfiles de clientes con cuenta ----------
+    match /users/{uid} {
+      allow read: if (signedIn() && request.auth.uid == uid) || isAdmin();
+      allow create, update: if signedIn() && request.auth.uid == uid
+        && request.resource.data.uid == uid
+        && request.resource.data.keys().hasOnly(['uid', 'email', 'nombre', 'telefono', 'direcciones', 'favoritos'])
+        && isStr(request.resource.data.nombre, 0, 120)
+        && isStr(request.resource.data.telefono, 0, 30)
+        && optStr(request.resource.data, 'email', 120)
+        && request.resource.data.direcciones is list && request.resource.data.direcciones.size() <= 10
+        && (!('favoritos' in request.resource.data) || (request.resource.data.favoritos is list && request.resource.data.favoritos.size() <= 200));
+      allow delete: if (signedIn() && request.auth.uid == uid) || isAdmin();
+    }
+
+    // ---------- notas privadas del admin sobre cada cliente ----------
+    match /clientNotes/{uid} {
+      allow read: if isAdmin();
+      allow create, update: if isAdmin()
+        && request.resource.data.keys().hasOnly(['uid', 'nota', 'actualizado'])
+        && request.resource.data.uid == uid
+        && isStr(request.resource.data.nota, 0, 2000);
+      allow delete: if isAdmin();
+    }
+
+    // ---------- todo lo demás: cerrado ----------
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
