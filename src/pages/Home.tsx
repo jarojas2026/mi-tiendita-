@@ -162,7 +162,7 @@ export default function Home() {
             <div>
               <span className="inline-flex items-center gap-1 rounded-full bg-brand-600 px-2.5 py-1 text-[11px] font-extrabold tracking-wide text-white uppercase"><Icon name="leaf" size={14} /> Productos de finca</span>
               <h2 className="mt-2 text-[28px] leading-tight font-bold text-earth-900 dark:text-earth-50">De nuestra granja a tu mesa</h2>
-              <p className="mt-2 max-w-xl text-sm text-earth-700 dark:text-earth-200">Huevos Palmital frescos —cartón de 15 o bolsa de 20, a {'₡'}1.500— y lácteos de la lechería de la familia. Sin intermediarios, directo de Pérez Zeledón.</p>
+              <p className="mt-2 max-w-xl text-sm text-earth-700 dark:text-earth-200">Huevos Palmital frescos —cartón de 30 a {'₡'}2.500 o bolsa de 20 a {'₡'}1.500— y lácteos de la lechería de la familia. Sin intermediarios, directo de Pérez Zeledón.</p>
             </div>
             <ul className="flex flex-wrap gap-2 text-sm text-earth-800 dark:text-earth-100">
               <li className="rounded-full bg-white/70 px-3 py-1 dark:bg-black/20">🥚 Recogidos cada día</li>
