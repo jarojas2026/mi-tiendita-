@@ -223,8 +223,8 @@ export function Insignias({ p }: { p: Product }) {
 export function Precio({ p, big }: { p: Product; big?: boolean }) {
   return (
     <div className={big ? 'text-3xl' : 'text-[17px]'}>
-      <span className={`font-extrabold tracking-tight ${p.precio == null ? 'text-sm text-muted' : 'text-ink'}`}>{colones(p.precio)}</span>
-      {p.precio != null && p.venta === 'kg' && <span className="text-xs font-semibold text-muted"> / kg</span>}
+      <span className="whitespace-nowrap"><span className={`font-extrabold tracking-tight ${p.precio == null ? 'text-sm text-muted' : 'text-ink'}`}>{colones(p.precio)}</span>
+      {p.precio != null && p.venta === 'kg' && <span className="text-xs font-semibold text-muted">{'\u00a0'}/{'\u00a0'}kg</span>}</span>
       {p.precioAntes && p.precio != null && p.precioAntes > p.precio && (
         <span className="ml-1.5 text-xs text-muted line-through">{colones(p.precioAntes)}</span>
       )}

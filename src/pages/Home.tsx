@@ -142,11 +142,11 @@ export default function Home() {
         <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-6" data-testid="destacadas">
           {destacadas.map((d) => (
             <Link key={d.id} to={`/catalogo?dest=${d.id}`} className="group flex flex-col items-center rounded-2xl bg-surface p-2.5 text-center shadow-card ring-1 ring-line transition-shadow hover:shadow-lift">
-              <span className="h-16 w-16 overflow-hidden rounded-full bg-surface-2 ring-2 ring-accent-200 dark:ring-accent-700">
+              <span className="h-20 w-20 overflow-hidden rounded-full sm:h-24 sm:w-24 bg-surface-2 ring-2 ring-accent-200 dark:ring-accent-700">
                 {d.portada && <img src={imgUrl(d.portada)} alt="" loading="lazy" className="h-full w-full object-cover transition group-hover:scale-110" />}
               </span>
-              <span className="mt-1.5 text-[12.5px] leading-tight font-bold text-ink">{d.titulo}</span>
-              <span className="text-[10.5px] text-muted">{d.total} productos</span>
+              <span className="mt-1.5 text-[12.5px] leading-tight font-bold text-ink">{d.titulo}</span>{' '}
+              <span className="text-[10.5px] text-muted">· {d.total} productos</span>
             </Link>
           ))}
         </div>

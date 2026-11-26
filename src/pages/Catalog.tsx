@@ -54,7 +54,7 @@ export default function Catalog() {
       <div className="flex items-center justify-between gap-2">
         <h1 className="text-2xl font-bold">
           {q ? `“${q}”` : catName ?? dest?.titulo ?? (oferta ? 'Ofertas' : 'Catálogo')}
-          <span className="ml-2 font-sans text-sm font-normal text-muted" data-testid="result-count">{list.length} productos</span>
+          {' '}<span className="ml-2 font-sans text-sm font-normal text-muted" data-testid="result-count">{list.length} productos</span>
         </h1>
         <button onClick={() => setOpen(!open)} aria-expanded={open} className="shrink-0 rounded-full bg-surface px-3.5 py-2 text-sm font-semibold ring-1 ring-line">⚙️ Filtros</button>
       </div>

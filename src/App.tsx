@@ -59,7 +59,7 @@ export default function App() {
         <a href="#contenido" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-2">Saltar al contenido</a>
         <ScrollTop />
         <Header />
-        <main id="contenido" className="mx-auto max-w-6xl px-3 pt-4 pb-6">
+        <main id="contenido" className="mx-auto max-w-6xl px-3 pt-4 pb-24 sm:pb-8">
           <Suspense fallback={<div className="pt-4"><SkeletonGrid n={6} /></div>}>
             <Routes>
               <Route path="/" element={<Home />} />
