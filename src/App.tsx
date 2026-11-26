@@ -1,4 +1,4 @@
-import { HashRouter, Link, Route, Routes, useLocation } from 'react-router-dom'
+import { HashRouter, Link, Route, Routes, useLocation , Navigate } from 'react-router-dom'
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { StoreProvider } from './store'
 import { BottomNav, Empty, Footer, Header, SkeletonGrid } from './components/ui'
@@ -33,14 +33,14 @@ function ChatLauncher() {
     const f = () => { setCargado(true); setOpen(true) }
     window.addEventListener('mt:abrir-asistente', f); return () => window.removeEventListener('mt:abrir-asistente', f)
   }, [])
-  if (pathname.startsWith('/checkout') || pathname.startsWith('/admin')) return null
+  if (['/checkout','/admin','/entrar','/carrito'].some((r) => pathname.startsWith(r))) return null
   return (
     <>
       {!open && (
         <button onClick={() => { setCargado(true); setOpen(true) }} aria-label="Abrir Asistente Tiendita" data-testid="chat-open"
-          className="fixed right-3 bottom-20 z-40 flex items-center gap-2 rounded-full bg-brand-600 py-3 pr-4 pl-3 font-bold text-white shadow-lift transition hover:scale-105 hover:bg-brand-700 sm:bottom-6">
+          className="fixed right-3 bottom-20 z-40 flex items-center gap-2 rounded-full bg-brand-600 p-3 sm:pr-4 font-bold text-white shadow-lift transition hover:scale-105 hover:bg-brand-700 sm:bottom-6">
           <span className="relative"><Icon name="chat" size={22} /><span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-accent-400 ring-2 ring-brand-600" /></span>
-          <span className="text-sm">Asistente</span>
+          <span className="hidden text-sm sm:inline">Asistente</span>
         </button>
       )}
       {cargado && (
@@ -69,6 +69,7 @@ export default function App() {
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/favoritos" element={<Favorites />} />
               <Route path="/entrar" element={<Login />} />
+              <Route path="/finca" element={<Navigate to="/catalogo?cat=finca" replace />} />
               <Route path="/cuenta" element={<Profile />} />
               <Route path="/cuenta/pedidos" element={<MyOrders />} />
               <Route path="/cuenta/pedidos/:id" element={<Tracking />} />
