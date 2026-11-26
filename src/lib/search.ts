@@ -14,6 +14,7 @@ const SINONIMOS: Record<string, string> = {
 }
 export const expandir = (q: string) => norm(q).split(/\s+/).filter(Boolean).map((w) => SINONIMOS[w] ?? w).filter(Boolean).join(' ')
 
+const MAX_SCORE = 0.35
 let idx: { fuse: Fuse<Product>; src: Product[] } | null = null
 export function buscar(products: Product[], q: string, limit = 60): Product[] {
   const visibles = products.filter((p) => !p.oculto)
@@ -22,7 +23,7 @@ export function buscar(products: Product[], q: string, limit = 60): Product[] {
       src: products,
       fuse: new Fuse(visibles.map((p) => ({ ...p, _n: norm(p.nombre), _c: norm(p.categoria) }) as Product), {
         keys: [{ name: '_n', weight: 0.75 }, { name: '_c', weight: 0.25 }],
-        threshold: 0.36, ignoreLocation: true, minMatchCharLength: 2,
+        threshold: 0.36, ignoreLocation: true, minMatchCharLength: 2, includeScore: true,
       }),
     }
   }
@@ -34,7 +35,15 @@ export function buscar(products: Product[], q: string, limit = 60): Product[] {
   if (exact.length >= Math.min(limit, 6)) return exact.slice(0, limit)
   // Si lo buscado coincide con productos ocultos a propósito (licencias, etc.), no "adivinar" parecidos
   if (!exact.length && products.some((p) => p.oculto && words.every((w) => norm(p.nombre).includes(w)))) return []
-  const fuzzy = idx.fuse.search(t, { limit }).map((r) => visibles.find((p) => p.id === r.item.id)!).filter(Boolean)
+  // Corte de calidad: sin esto "arroz" devolvía "Carro …" (puntaje 0.43). Las faltas comunes quedan ≤ 0.3.
+  const fuzzy = idx.fuse.search(t, { limit }).filter((r) => (r.score ?? 1) <= MAX_SCORE)
+    .map((r) => visibles.find((p) => p.id === r.item.id)!).filter(Boolean)
   const seen = new Set(exact.map((p) => p.id))
-  return [...exact, ...fuzzy.filter((p) => !seen.has(p.id))].slice(0, limit)
+  const res = [...exact, ...fuzzy.filter((p) => !seen.has(p.id))]
+  if (res.length || words.length < 2) return res.slice(0, limit)
+  // Varias palabras sin resultado (ej. "medias navideñas"): mostrar lo que coincida con alguna palabra
+  const largas = words.filter((w) => w.length >= 4)
+  return visibles
+    .map((p) => { const s = norm(p.nombre + ' ' + p.categoria); return { p, n: largas.filter((w) => s.includes(w)).length } })
+    .filter((x) => x.n > 0).sort((a, b) => b.n - a.n).map((x) => x.p).slice(0, limit)
 }

@@ -65,7 +65,7 @@ export function SearchBox() {
   // Cerrar sugerencias al navegar (derivado en render, sin efecto)
   const ruta = loc.pathname + loc.search
   const [rutaPrev, setRutaPrev] = useState(ruta)
-  if (rutaPrev !== ruta) { setRutaPrev(ruta); setOpen(false) }
+  if (rutaPrev !== ruta) { setRutaPrev(ruta); setOpen(false); if (!loc.pathname.startsWith('/catalogo')) setQ('') }
   const sug = useMemo(() => (q.trim().length >= 2 ? buscar(products, q, 6) : []), [q, products])
   const populares = ['huevos', 'medias', 'audífonos', 'luces solares', 'juguetes', 'termo']
   const opciones: { label: string; go: () => void; p?: Product }[] = q.trim().length >= 2
@@ -161,9 +161,16 @@ export function BottomNav() {
   const { cartCount, user } = useStore()
   const { pathname } = useLocation()
   if (pathname.startsWith('/checkout')) return null
+  return <BottomNavBar cartCount={cartCount} user={!!user} />
+}
+
+function BottomNavBar({ cartCount, user }: { cartCount: number; user: boolean }) {
   const cls = ({ isActive }: { isActive: boolean }) =>
     `relative flex flex-1 flex-col items-center gap-0.5 py-2 text-[11px] font-semibold transition ${isActive ? 'text-brand-600 dark:text-brand-300' : 'text-muted'}`
   return (
+    <>
+    {/* Espacio para que la barra fija no tape el pie; mismo color del pie para no dejar una franja vacía */}
+    <div className="h-[calc(4rem+env(safe-area-inset-bottom))] bg-earth-900 sm:hidden dark:bg-black/40" aria-hidden="true" />
     <nav aria-label="Navegación principal" className="fixed inset-x-0 bottom-0 z-30 flex border-t border-line bg-surface/95 pb-[env(safe-area-inset-bottom)] backdrop-blur sm:hidden">
       <NavLink to="/" end className={cls}><Icon name="home" />Inicio</NavLink>
       <NavLink to="/catalogo" className={cls}><Icon name="grid" />Catálogo</NavLink>
@@ -171,6 +178,7 @@ export function BottomNav() {
       <NavLink to="/carrito" className={cls}><Icon name="cart" />Carrito{cartCount ? ` (${cartCount})` : ''}</NavLink>
       <NavLink to={user ? '/cuenta' : '/entrar'} className={cls}><Icon name="user" />Cuenta</NavLink>
     </nav>
+    </>
   )
 }
 
@@ -198,6 +206,7 @@ export function Footer() {
             <Icon name="pin" size={18} className="mt-0.5 shrink-0" /> Pérez Zeledón, San José, Costa Rica (retiro en Palmital de Rivas)
           </a>
           <p className="flex items-center gap-2"><Icon name="truck" size={18} /> Envío por zona · gratis en San Isidro centro</p>
+          <Link to="/ayuda" className="flex items-center gap-2 font-semibold hover:text-accent-300"><Icon name="card" size={18} /> Envíos, pagos y contacto</Link>
         </div>
       </div>
       <p className="border-t border-white/10 py-4 text-center text-xs text-earth-300">© {new Date().getFullYear()} {config.storeName} · Hecho con cariño en Pérez Zeledón</p>
@@ -211,14 +220,13 @@ export function Badge({ p }: { p: Product }) {
   return <span className={`inline-block rounded-full px-2 py-0.5 text-[11px] font-bold whitespace-nowrap ${color}`}>{p.disponibilidad}</span>
 }
 
-/** Insignias sobre la foto: "De la finca", "Oferta", "Bajo pedido" */
+/** Insignias sobre la foto: "De la finca", "Oferta". "Bajo pedido" va en el texto: las fotos del proveedor ya traen ese rótulo arriba y la etiqueta lo tapaba. */
 export function Insignias({ p }: { p: Product }) {
   const descuento = p.precioAntes && p.precio && p.precioAntes > p.precio ? Math.round((1 - p.precio / p.precioAntes) * 100) : 0
   return (
     <div className="pointer-events-none absolute top-2 left-2 flex flex-col items-start gap-1">
       {p.finca && <span className="rounded-full bg-brand-600 px-2 py-0.5 text-[10.5px] font-extrabold text-white shadow">🌱 De la finca</span>}
       {(p.oferta || descuento > 0) && <span className="rounded-full bg-red-600 px-2 py-0.5 text-[10.5px] font-extrabold text-white shadow">Oferta{descuento ? ` −${descuento}%` : ''}</span>}
-      {p.disponibilidad === 'Bajo pedido' && <span className="rounded-full bg-white/95 px-2 py-0.5 text-[10.5px] font-bold text-earth-700 shadow">Bajo pedido</span>}
     </div>
   )
 }
@@ -274,6 +282,7 @@ export function ProductCard({ p }: { p: Product }) {
       <div className="flex flex-1 flex-col gap-1 p-2.5">
         <Link to={`/p/${p.id}`} className="line-clamp-2 min-h-[2.5em] rounded text-[13.5px] leading-tight font-medium text-ink hover:text-brand-600 dark:hover:text-brand-300">{p.nombre}</Link>
         {p.finca && p.unidad && <span className="text-[11px] text-muted">{p.unidad}{p.paso && p.paso < 1 ? ' · desde ½ kg' : ''}</span>}
+        {p.disponibilidad === 'Bajo pedido' && <span className="text-[11px] font-semibold text-accent-700 dark:text-accent-300">Bajo pedido</span>}
         <div className="mt-auto flex items-end justify-between gap-1">
           <Precio p={p} />
           <button

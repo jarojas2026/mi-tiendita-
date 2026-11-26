@@ -87,7 +87,10 @@ h1, h2, .font-display { font-family: var(--font-display); font-optical-sizing: a
 
 /* Foco visible y accesible para teclado */
 /* :where() = especificidad 0, así outline-none en un componente puede ganarle */
-:where(:focus-visible) { outline: 3px solid var(--color-accent-400); outline-offset: 2px; border-radius: 10px; }
+/* En @layer base: una regla sin capa le gana a cualquier utilidad de Tailwind (que vive en @layer utilities) */
+@layer base {
+  :where(:focus-visible) { outline: 3px solid var(--color-accent-400); outline-offset: 2px; border-radius: 10px; }
+}
 
 /* Skeleton */
 .skeleton { background: linear-gradient(90deg, var(--mt-surface-2) 25%, var(--mt-line) 37%, var(--mt-surface-2) 63%); background-size: 400% 100%; animation: var(--animate-shimmer); }

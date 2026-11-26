@@ -10,6 +10,7 @@ const Catalog = lazy(() => import('./pages/Catalog'))
 const ProductPage = lazy(() => import('./pages/ProductPage'))
 const Cart = lazy(() => import('./pages/Cart'))
 const Checkout = lazy(() => import('./pages/Checkout'))
+const Info = lazy(() => import('./pages/Info'))
 const Admin = lazy(() => import('./pages/admin/Admin'))
 const Favorites = lazy(() => import('./pages/Favorites'))
 const Login = lazy(() => import('./pages/Account').then((m) => ({ default: m.Login })))
@@ -70,6 +71,9 @@ export default function App() {
               <Route path="/carrito" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/favoritos" element={<Favorites />} />
+              <Route path="/ayuda" element={<Info />} />
+              <Route path="/envios" element={<Navigate to="/ayuda" replace />} />
+              <Route path="/contacto" element={<Navigate to="/ayuda" replace />} />
               <Route path="/entrar" element={<Login />} />
               <Route path="/finca" element={<Navigate to="/catalogo?cat=finca" replace />} />
               <Route path="/cuenta" element={<Profile />} />
@@ -82,7 +86,6 @@ export default function App() {
           </Suspense>
         </main>
         <Footer />
-        <div className="h-20 sm:hidden" aria-hidden="true" />
         <BottomNav />
         <ChatLauncher />
       </HashRouter>
