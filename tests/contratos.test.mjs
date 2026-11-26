@@ -16,6 +16,8 @@ test('Hosting manda COOP same-origin-allow-popups (popup de Google)', () => {
 test('authDomain usa el mismo dominio solo en Firebase Hosting', () => {
   assert.match(config, /authDomain: resolveAuthDomain\(/)
   assert.match(config, /mi-tiendita-digital-b9835\.web\.app/)
+  // web.app no es authDomain por defecto (evita redirect_uri_mismatch)
+  assert.match(config, /VITE_AUTH_MISMO_DOMINIO === '1'/)
 })
 
 test('Admins fijos en reglas y en config coinciden', () => {

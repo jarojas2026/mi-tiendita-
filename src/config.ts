@@ -151,7 +151,14 @@ export const zonasDefault: ZonaCfg[] = config.zonas as ZonaCfg[]
 const env = import.meta.env
 // En Firebase Hosting el manejador /__/auth vive en el mismo dominio: Google muestra la tienda
 // (no firebaseapp.com) y el inicio por redirección funciona en Safari/iPhone (sin cookies de terceros).
-export const HOSTING_AUTH_HOSTS = ['mi-tiendita-digital-b9835.web.app', 'mi-tiendita-digital-b9835.firebaseapp.com']
+// OJO: web.app solo sirve como authDomain si en Google Cloud > Credenciales > cliente web OAuth está
+// autorizado https://mi-tiendita-digital-b9835.web.app/__/auth/handler. Mientras no esté, Google da
+// redirect_uri_mismatch, así que web.app usa firebaseapp.com. Para activarlo: VITE_AUTH_MISMO_DOMINIO=1.
+const WEB_APP_HOST = 'mi-tiendita-digital-b9835.web.app'
+export const HOSTING_AUTH_HOSTS = [
+  'mi-tiendita-digital-b9835.firebaseapp.com',
+  ...(env.VITE_AUTH_MISMO_DOMINIO === '1' ? [WEB_APP_HOST] : []),
+]
 export function resolveAuthDomain(fallback: string): string {
   const h = typeof location !== 'undefined' ? location.hostname : ''
   return HOSTING_AUTH_HOSTS.includes(h) ? h : fallback
