@@ -8,6 +8,7 @@ import { enDestacada } from '../lib/format'
 import { iconoCat } from '../lib/categorias'
 import { paraVos, useFavs, useVistos } from '../lib/memory'
 import type { Product } from '../types'
+import { useSeo } from '../lib/seo'
 
 // Selección determinística (cambia cada día)
 const seeded = (s: string, day: number) => {
@@ -89,6 +90,7 @@ const BENEFICIOS: { icono: string; t: string; s: string; destacado?: boolean; hr
 ]
 
 export default function Home() {
+  useSeo()
   const { products, categorias, loading, misPedidos } = useStore()
   const favs = useFavs()
   const vistosIds = useVistos()
@@ -98,7 +100,7 @@ export default function Home() {
   const ofertas = visibles.filter((p) => p.oferta)
   const vistos = vistosIds.map((id) => byId.get(id)).filter((p): p is Product => !!p).slice(0, 12)
   const recomendados = useMemo(() => paraVos(visibles, misPedidos, favs, vistosIds, 12), [visibles, misPedidos, favs, vistosIds])
-  const day = Math.floor(Date.now() / 86400000)
+  const [day] = useState(() => Math.floor(Date.now() / 86400000))
   const novedades = useMemo(() => visibles.filter((p) => !p.finca && p.precio != null)
     .sort((a, b) => seeded(a.id, day) - seeded(b.id, day)).slice(0, 12), [visibles, day])
 

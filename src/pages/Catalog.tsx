@@ -6,6 +6,7 @@ import { enDestacada } from '../lib/format'
 import { buscar } from '../lib/search'
 import { iconoCat } from '../lib/categorias'
 import { config } from '../config'
+import { useSeo } from '../lib/seo'
 
 const PAGE = 48
 
@@ -45,7 +46,10 @@ export default function Catalog() {
     return sorted
   }, [products, q, cat, disp, orden, min, max, oferta, dest])
 
-  const catName = categorias.find((c) => c.id === cat)?.nombre
+  const activos = [disp, min, max, oferta ? '1' : ''].filter(Boolean).length + (orden !== 'relevancia' ? 1 : 0)
+  const limpiar = () => { const n = new URLSearchParams(); if (q) n.set('q', q); if (cat) n.set('cat', cat); setSp(n, { replace: true }); setLimit(PAGE) }
+  const catName = cat === 'finca' ? 'Productos de finca' : categorias.find((c) => c.id === cat)?.nombre
+  useSeo(q ? `Resultados para “${q}”` : catName ?? dest?.titulo ?? (oferta ? 'Ofertas' : 'Catálogo'), catName ? `${catName} en ${config.storeName}, Pérez Zeledón: ${list.length} productos con entrega en San Isidro y alrededores.` : undefined)
   const sel = 'w-full rounded-xl border border-line bg-surface px-2 py-2 text-sm text-ink'
   const chip = (on: boolean) => `flex shrink-0 items-center gap-1.5 rounded-full px-3.5 py-1.5 text-sm font-semibold transition ${on ? 'bg-brand-600 text-white shadow-sm' : 'bg-surface ring-1 ring-line hover:ring-brand-400'}`
 
@@ -56,7 +60,19 @@ export default function Catalog() {
           {q ? `“${q}”` : catName ?? dest?.titulo ?? (oferta ? 'Ofertas' : 'Catálogo')}
           {' '}<span className="ml-2 font-sans text-sm font-normal text-muted" data-testid="result-count">{list.length} productos</span>
         </h1>
-        <button onClick={() => setOpen(!open)} aria-expanded={open} className="shrink-0 rounded-full bg-surface px-3.5 py-2 text-sm font-semibold ring-1 ring-line">⚙️ Filtros</button>
+        <div className="flex shrink-0 items-center gap-2">
+          <label className="hidden items-center gap-1.5 text-sm text-muted sm:flex">Ordenar
+            <select aria-label="Ordenar productos" className="rounded-full border border-line bg-surface px-3 py-2 text-sm font-semibold text-ink" value={orden} onChange={(e) => set('orden', e.target.value)}>
+              <option value="relevancia">Relevancia</option>
+              <option value="precio-asc">Precio: menor a mayor</option>
+              <option value="precio-desc">Precio: mayor a menor</option>
+              <option value="nombre">Nombre A–Z</option>
+            </select>
+          </label>
+          <button onClick={() => setOpen(!open)} aria-expanded={open} aria-controls="panel-filtros" className={`rounded-full px-3.5 py-2 text-sm font-semibold ring-1 transition ${open || activos ? 'bg-brand-50 text-brand-800 ring-brand-300 dark:bg-brand-900/50 dark:text-brand-100 dark:ring-brand-700' : 'bg-surface ring-line hover:ring-brand-400'}`}>
+            ⚙️ Filtros{activos ? ` (${activos})` : ''}
+          </button>
+        </div>
       </div>
 
       <div className="no-scrollbar -mx-3 mt-3 flex gap-2 overflow-x-auto px-3 pb-1" role="toolbar" aria-label="Categorías">
@@ -68,7 +84,7 @@ export default function Catalog() {
       </div>
 
       {open && (
-        <div className="mt-2 grid animate-fade-up grid-cols-2 gap-2 rounded-2xl bg-surface p-3 ring-1 ring-line sm:grid-cols-5">
+        <div id="panel-filtros" className="mt-2 grid animate-fade-up grid-cols-2 gap-2 rounded-2xl bg-surface p-3 shadow-card ring-1 ring-line sm:grid-cols-5">
           <label className="text-xs font-semibold">Categoría
             <select className={sel} value={cat} onChange={(e) => set('cat', e.target.value)}>
               <option value="">Todas</option>
@@ -95,6 +111,10 @@ export default function Catalog() {
               <option value="nombre">Nombre A–Z</option>
             </select>
           </label>
+          <label className="col-span-2 flex items-center gap-2 text-sm font-semibold sm:col-span-4">
+            <input type="checkbox" className="h-4 w-4 accent-brand-600" checked={oferta} onChange={(e) => set('oferta', e.target.checked ? '1' : '')} /> Solo ofertas
+          </label>
+          {activos > 0 && <button onClick={limpiar} className="col-span-2 rounded-full px-3 py-1.5 text-sm font-bold text-brand-700 hover:bg-brand-50 sm:col-span-1 dark:text-brand-300 dark:hover:bg-brand-900/40">Limpiar filtros</button>}
         </div>
       )}
 

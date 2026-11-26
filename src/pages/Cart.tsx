@@ -6,8 +6,10 @@ import { totales } from '../lib/order'
 import { compradosJuntos } from '../lib/memory'
 import { useStore } from '../store'
 import { Badge, Btn, Card, Empty, ProductCard, ProductImage, QtyStepper, Rail, Section, SkeletonGrid } from '../components/ui'
+import { useSeo } from '../lib/seo'
 
 export default function Cart() {
+  useSeo('Carrito')
   const { cart, byId, setQty, user, loading, misPedidos, products } = useStore()
   const nav = useNavigate()
   const t = totales(cart, byId)

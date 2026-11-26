@@ -2,8 +2,10 @@ import { Link } from 'react-router-dom'
 import { useStore } from '../store'
 import { Empty, Grid, ProductCard, SkeletonGrid } from '../components/ui'
 import { useFavs } from '../lib/memory'
+import { useSeo } from '../lib/seo'
 
 export default function Favorites() {
+  useSeo('Favoritos')
   const { byId, loading, addToCart } = useStore()
   const favs = useFavs()
   const list = favs.map((id) => byId[id]).filter((p) => p && !p.oculto)

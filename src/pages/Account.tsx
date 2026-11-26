@@ -9,8 +9,10 @@ import { Btn, Card, Empty, Input } from '../components/ui'
 import { Icon } from '../components/icons'
 import { fmtKm, gmapsDir, wazeLink } from '../lib/geo'
 import { ESTADOS, type Order, type Perfil } from '../types'
+import { useSeo } from '../lib/seo'
 
 export function Login() {
+  useSeo('Entrar')
   const { api, user } = useStore()
   const [sp] = useSearchParams()
   const nav = useNavigate()

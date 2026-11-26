@@ -34,11 +34,13 @@ function ChatLauncher() {
     window.addEventListener('mt:abrir-asistente', f); return () => window.removeEventListener('mt:abrir-asistente', f)
   }, [])
   if (['/checkout','/admin','/entrar','/carrito'].some((r) => pathname.startsWith(r))) return null
+  // En la ficha de producto (móvil) ya está "Pedir por WhatsApp": el botón flotante no debe tapar acciones
+  const ocultarMovil = pathname.startsWith('/p/')
   return (
     <>
       {!open && (
         <button onClick={() => { setCargado(true); setOpen(true) }} aria-label="Abrir Asistente Tiendita" data-testid="chat-open"
-          className="fixed right-3 bottom-20 z-40 flex items-center gap-2 rounded-full bg-brand-600 p-3 sm:pr-4 font-bold text-white shadow-lift transition hover:scale-105 hover:bg-brand-700 sm:bottom-6">
+          className={`fixed right-3 bottom-20 z-40 ${ocultarMovil ? 'hidden sm:flex' : 'flex'} items-center gap-2 rounded-full bg-brand-600 p-3 sm:pr-4 font-bold text-white shadow-lift transition hover:scale-105 hover:bg-brand-700 sm:bottom-6`}>
           <span className="relative"><Icon name="chat" size={22} /><span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-accent-400 ring-2 ring-brand-600" /></span>
           <span className="hidden text-sm sm:inline">Asistente</span>
         </button>
@@ -56,10 +58,10 @@ export default function App() {
   return (
     <StoreProvider>
       <HashRouter>
-        <a href="#contenido" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-2">Saltar al contenido</a>
+        <a href="#contenido" className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-xl focus:bg-white focus:px-4 focus:py-2 focus:font-bold focus:text-brand-800 focus:shadow-lift">Saltar al contenido</a>
         <ScrollTop />
         <Header />
-        <main id="contenido" className="mx-auto max-w-6xl px-3 pt-4 pb-24 sm:pb-8">
+        <main id="contenido" className="mx-auto min-h-[60vh] max-w-6xl px-3 pt-4 pb-8 sm:px-4">
           <Suspense fallback={<div className="pt-4"><SkeletonGrid n={6} /></div>}>
             <Routes>
               <Route path="/" element={<Home />} />

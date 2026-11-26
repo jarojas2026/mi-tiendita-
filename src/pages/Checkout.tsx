@@ -9,10 +9,12 @@ import { Btn, Card, Input } from '../components/ui'
 import { Icon } from '../components/icons'
 import { fmtKm, gmapsLink, miUbicacion, sugerirEnvio } from '../lib/geo'
 import type { LatLng, Perfil } from '../types'
+import { useSeo } from '../lib/seo'
 
 const MapPicker = lazy(() => import('../map/MapPicker'))
 
 export default function Checkout() {
+  useSeo('Finalizar pedido')
   const { cart, byId, user, authReady, api, clearCart, loading, refreshPedidos, zonas, ajustes } = useStore()
   const nav = useNavigate()
   const [perfil, setPerfil] = useState<Perfil | null>(null)

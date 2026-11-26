@@ -62,7 +62,10 @@ export function SearchBox() {
   const inputRef = useRef<HTMLInputElement>(null)
   const listId = useId()
   const loc = useLocation()
-  useEffect(() => { setOpen(false) }, [loc.pathname, loc.search])
+  // Cerrar sugerencias al navegar (derivado en render, sin efecto)
+  const ruta = loc.pathname + loc.search
+  const [rutaPrev, setRutaPrev] = useState(ruta)
+  if (rutaPrev !== ruta) { setRutaPrev(ruta); setOpen(false) }
   const sug = useMemo(() => (q.trim().length >= 2 ? buscar(products, q, 6) : []), [q, products])
   const populares = ['huevos', 'medias', 'audífonos', 'luces solares', 'juguetes', 'termo']
   const opciones: { label: string; go: () => void; p?: Product }[] = q.trim().length >= 2
@@ -252,7 +255,7 @@ export function FavButton({ id, className = '' }: { id: string; className?: stri
   const on = favs.includes(id)
   return (
     <button onClick={(e) => { e.preventDefault(); toggleFav(id) }} aria-pressed={on} aria-label={on ? 'Quitar de favoritos' : 'Agregar a favoritos'}
-      className={`rounded-full bg-white/90 p-1.5 shadow backdrop-blur transition hover:scale-110 dark:bg-black/50 ${on ? 'text-red-500' : 'text-earth-500 dark:text-earth-200'} ${className}`}>
+      className={`rounded-full bg-white/90 p-1.5 shadow backdrop-blur transition hover:scale-110 active:scale-95 dark:bg-black/50 ${on ? 'text-red-500' : 'text-earth-500 dark:text-earth-200'} ${className}`}>
       <Icon name="heart" size={18} filled={on} key={String(on)} className={on ? 'animate-pop' : ''} />
     </button>
   )
@@ -262,14 +265,14 @@ export function ProductCard({ p }: { p: Product }) {
   const { addToCart } = useStore()
   const [ok, setOk] = useState(false)
   return (
-    <article className="group flex animate-fade-up flex-col overflow-hidden rounded-2xl bg-surface shadow-card ring-1 ring-line transition-shadow hover:shadow-lift" data-testid="product-card">
+    <article className="group relative flex animate-fade-up flex-col overflow-hidden rounded-2xl bg-surface shadow-card ring-1 ring-line transition duration-300 hover:-translate-y-0.5 hover:shadow-lift hover:ring-brand-200 focus-within:ring-brand-400 dark:hover:ring-brand-700" data-testid="product-card">
       <div className="relative">
         <Link to={`/p/${p.id}`} className="block" tabIndex={-1} aria-hidden="true"><ProductImage p={p} thumb className="transition duration-500 group-hover:scale-[1.03]" /></Link>
         <Insignias p={p} />
         <FavButton id={p.id} className="absolute top-2 right-2" />
       </div>
       <div className="flex flex-1 flex-col gap-1 p-2.5">
-        <Link to={`/p/${p.id}`} className="line-clamp-2 min-h-[2.5em] text-[13.5px] leading-tight font-medium text-ink hover:text-brand-600">{p.nombre}</Link>
+        <Link to={`/p/${p.id}`} className="line-clamp-2 min-h-[2.5em] rounded text-[13.5px] leading-tight font-medium text-ink hover:text-brand-600 dark:hover:text-brand-300">{p.nombre}</Link>
         {p.finca && p.unidad && <span className="text-[11px] text-muted">{p.unidad}{p.paso && p.paso < 1 ? ' · desde ½ kg' : ''}</span>}
         <div className="mt-auto flex items-end justify-between gap-1">
           <Precio p={p} />
