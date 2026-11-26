@@ -77,11 +77,11 @@ function Hero({ fotos }: { fotos: Record<string, Product[]> }) {
   )
 }
 
-const BENEFICIOS = [
+const BENEFICIOS: { icono: string; t: string; s: string; destacado?: boolean; href?: string }[] = [
   { icono: '🚚', t: 'Envío gratis en San Isidro', s: 'Centro de San Isidro de El General', destacado: true },
   { icono: '📱', t: 'SINPE o efectivo', s: 'Pagás al recibir o por SINPE' },
   { icono: '🏡', t: 'Retiro gratis', s: 'En la tienda, Palmital de Rivas' },
-  { icono: '💬', t: 'Pedí por WhatsApp', s: `Te atendemos al ${config.whatsappVisible}` },
+  { icono: '💬', t: 'Pedí por WhatsApp', s: `Te atendemos al ${config.whatsappVisible}`, href: `https://wa.me/${config.whatsapp}` },
 ]
 
 export default function Home() {
@@ -112,12 +112,16 @@ export default function Home() {
 
       {/* Beneficios */}
       <div className="no-scrollbar -mx-3 mt-4 flex gap-2 overflow-x-auto px-3 sm:grid sm:grid-cols-4" data-testid="beneficios">
-        {BENEFICIOS.map((b) => (
-          <div key={b.t} className={`flex min-w-[210px] items-center gap-3 rounded-2xl p-3 ring-1 sm:min-w-0 ${b.destacado ? 'bg-accent-50 ring-accent-200 dark:bg-accent-700/20 dark:ring-accent-700' : 'bg-surface ring-line'}`}>
+        {BENEFICIOS.map((b) => {
+          const cls = `flex min-w-[210px] items-center gap-3 rounded-2xl p-3 ring-1 sm:min-w-0 ${b.destacado ? 'bg-accent-50 ring-accent-200 dark:bg-accent-700/20 dark:ring-accent-700' : 'bg-surface ring-line'}`
+          const body = (<>
             <span className="text-2xl" aria-hidden="true">{b.icono}</span>
             <span className="leading-tight"><b className="block text-sm">{b.t}</b><span className="text-xs text-muted">{b.s}</span></span>
-          </div>
-        ))}
+          </>)
+          return b.href
+            ? <a key={b.t} href={b.href} target="_blank" rel="noreferrer" data-testid="beneficio-whatsapp" className={`${cls} hover:ring-brand-500`}>{body}</a>
+            : <div key={b.t} className={cls}>{body}</div>
+        })}
       </div>
 
       {/* Chips de categoría */}
