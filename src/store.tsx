@@ -11,7 +11,7 @@ import type { Ajustes, CartItem, Order, Product, ProductOverride, SessionUser, D
 interface RawProduct {
   id: string; nombre: string; categoria: string; categoriaId: string; precio: number | null
   imagen: string; miniatura: string; origen: string; disponibilidad: Disponibilidad; vendorId: string
-  hidden?: boolean; motivoOculto?: string
+  hidden?: boolean; motivoOculto?: string; descripcion?: string
 }
 
 const fincaProducts = (): Product[] =>
