@@ -67,6 +67,10 @@ function Hero({ fotos }: { fotos: Record<string, Product[]> }) {
           )
         })}
       </div>
+      {n > 1 && <>
+        <button onClick={() => ir((i - 1 + n) % n)} aria-label="Anterior" data-testid="carrusel-prev" className="absolute top-1/2 left-2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/30 text-xl font-bold text-white backdrop-blur hover:bg-black/50">‹</button>
+        <button onClick={() => ir((i + 1) % n)} aria-label="Siguiente" data-testid="carrusel-next" className="absolute top-1/2 right-2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/30 text-xl font-bold text-white backdrop-blur hover:bg-black/50">›</button>
+      </>}
       <div className="absolute inset-x-0 bottom-3 flex justify-center gap-1.5">
         {config.banners.map((b, k) => (
           <button key={b.id} onClick={() => ir(k)} aria-label={`Ver ${b.titulo}`} aria-current={i === k}

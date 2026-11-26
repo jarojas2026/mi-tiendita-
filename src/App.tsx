@@ -1,4 +1,4 @@
-import { HashRouter, Route, Routes, useLocation } from 'react-router-dom'
+import { HashRouter, Link, Route, Routes, useLocation } from 'react-router-dom'
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { StoreProvider } from './store'
 import { BottomNav, Empty, Footer, Header, SkeletonGrid } from './components/ui'
@@ -74,7 +74,7 @@ export default function App() {
               <Route path="/cuenta/pedidos/:id" element={<Tracking />} />
               <Route path="/pedido/:id" element={<Tracking />} />
               <Route path="/admin" element={<Admin />} />
-              <Route path="*" element={<Empty tipo="lupa" titulo="Página no encontrada" texto="Esa dirección no existe. Volvé al inicio y seguí comprando." />} />
+              <Route path="*" element={<Empty tipo="lupa" titulo="Página no encontrada" texto="Esa dirección no existe. Volvé al inicio y seguí comprando."><Link to="/" data-testid="btn-volver-inicio" className="rounded-full bg-brand-600 px-5 py-2 font-bold text-white">Volver al inicio</Link></Empty>} />
             </Routes>
           </Suspense>
         </main>
