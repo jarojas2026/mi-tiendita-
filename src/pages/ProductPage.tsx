@@ -41,6 +41,7 @@ export default function ProductPage() {
           <div className="flex flex-wrap items-center gap-2 text-sm text-muted">
             <Badge p={p} /> <span>Origen: {p.origen}</span>{p.unidad && <span>· {p.unidad}</span>}
           </div>
+          {p.descripcion && <p className="text-[15px] leading-relaxed text-ink/90">{p.descripcion}</p>}
           {bajoPedido && (
             <div className="flex gap-2 rounded-2xl bg-accent-50 p-3 text-sm text-accent-700 ring-1 ring-accent-200 dark:bg-accent-700/20 dark:text-accent-100 dark:ring-accent-700">
               <Icon name="box" className="shrink-0" /><span><b>Bajo pedido:</b> llega en {config.plazoBajoPedido}. Requiere {config.adelantoPct}% de adelanto por SINPE al confirmar.</span>

@@ -64,11 +64,12 @@ export function Login() {
             <div className="flex items-center gap-2 text-xs text-muted"><hr className="flex-1 border-line" />o comprá sin cuenta<hr className="flex-1 border-line" /></div>
           </>
         )}
-          <form className="space-y-3" data-testid="form-telefono" onSubmit={(e) => { e.preventDefault(); go(() => api!.entrarTelefono(tel, nombre)) }}>
-            <p className="font-bold">📱 Entrar con tu número</p>
+          {next.startsWith('/checkout') && <p className="rounded-lg bg-brand-50 p-2 text-sm text-brand-800 dark:bg-brand-900/40 dark:text-brand-100" data-testid="aviso-invitado">🛒 <b>Comprá sin cuenta:</b> solo poné tu nombre y teléfono y seguís al pago.</p>}
+          <form className="space-y-3" data-testid="form-telefono" onSubmit={(e) => { e.preventDefault(); go(async () => { await api!.entrarTelefono(tel, nombre); nav(next, { replace: true }) }) }}>
+            <p className="font-bold">📱 Comprar sin cuenta (nombre y teléfono)</p>
             <Input label="Teléfono / WhatsApp" name="telefono" inputMode="tel" autoComplete="tel" placeholder="8888-8888" value={tel} onChange={(e) => setTel(e.target.value)} required />
-            <Input label="Tu nombre" name="nombre" autoComplete="name" value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder="Ej.: María Solís" />
-            <Btn className="w-full" disabled={busy || !api}>Continuar</Btn>
+            <Input label="Tu nombre" name="nombre" autoComplete="name" value={nombre} onChange={(e) => setNombre(e.target.value)} placeholder="Ej.: María Solís" required />
+            <Btn className="w-full" disabled={busy || !api} data-testid="btn-invitado">{next.startsWith('/checkout') ? 'Continuar al pago como invitado' : 'Continuar sin cuenta'}</Btn>
             <p className="text-[11px] text-muted">Sin contraseña: tu perfil y tu historial se guardan en este teléfono. El enlace de seguimiento de cada pedido funciona en cualquier dispositivo.</p>
           </form>
         <div className="flex items-center gap-2 text-xs text-muted"><hr className="flex-1 border-line" />o<hr className="flex-1 border-line" /></div>

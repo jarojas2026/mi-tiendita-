@@ -1,4 +1,4 @@
-import { HashRouter, Route, Routes, useLocation } from 'react-router-dom'
+import { HashRouter, Link, Route, Routes, useLocation } from 'react-router-dom'
 import { lazy, Suspense, useEffect, useState } from 'react'
 import { StoreProvider } from './store'
 import { BottomNav, Empty, Footer, Header, SkeletonGrid } from './components/ui'
@@ -59,7 +59,7 @@ export default function App() {
         <a href="#contenido" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:p-2">Saltar al contenido</a>
         <ScrollTop />
         <Header />
-        <main id="contenido" className="mx-auto max-w-6xl px-3 pt-4 pb-6">
+        <main id="contenido" className="mx-auto max-w-6xl px-3 pt-4 pb-24 sm:pb-8">
           <Suspense fallback={<div className="pt-4"><SkeletonGrid n={6} /></div>}>
             <Routes>
               <Route path="/" element={<Home />} />
@@ -74,7 +74,7 @@ export default function App() {
               <Route path="/cuenta/pedidos/:id" element={<Tracking />} />
               <Route path="/pedido/:id" element={<Tracking />} />
               <Route path="/admin" element={<Admin />} />
-              <Route path="*" element={<Empty tipo="lupa" titulo="Página no encontrada" texto="Esa dirección no existe. Volvé al inicio y seguí comprando." />} />
+              <Route path="*" element={<Empty tipo="lupa" titulo="Página no encontrada" texto="Esa dirección no existe. Volvé al inicio y seguí comprando."><Link to="/" data-testid="btn-volver-inicio" className="rounded-full bg-brand-600 px-5 py-2 font-bold text-white">Volver al inicio</Link></Empty>} />
             </Routes>
           </Suspense>
         </main>

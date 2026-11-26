@@ -16,6 +16,7 @@ export interface Product {
   venta?: 'kg' | 'paquete' | 'unidad' // unidad de venta (por defecto 'unidad')
   paso?: number // incremento de cantidad (0.5 = medios kilos)
   nota?: string
+  descripcion?: string
   origen: string
   disponibilidad: Disponibilidad
   vendorId: string

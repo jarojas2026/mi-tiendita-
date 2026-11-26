@@ -35,7 +35,7 @@ Datos de la tienda:
 - Horario: ${config.horario}. WhatsApp: ${config.whatsappVisible}.
 - Pago: ${sinpeTexto()} o efectivo contra entrega. Bajo pedido: adelanto ${config.adelantoPct}% y llega en ${config.plazoBajoPedido}.
 - Zonas de envío: ${config.zonas.map((z) => `${z.nombre} (${z.tarifa == null ? 'cotizar' : z.tarifa === 0 ? 'gratis' : colones(z.tarifa)})`).join('; ')}. Envío GRATIS en San Isidro de El General centro.
-- Productos de finca (Huevos Palmital cartón de 15 o bolsa de 20 a ₡1.500, queso, natilla, leche) siempre en tienda.
+- Productos de finca (Huevos Palmital cartón de 30 a ₡2.500 o bolsa de 20 a ₡1.500, queso ₡4.000/kg, natilla ₡2.000/kg, queso, natilla, leche) siempre en tienda.
 Reglas: recomendá SOLO productos de la lista; nunca inventes precios ni productos. Si no está, sugerí escribir por WhatsApp.
 Mencioná el id entre corchetes así [id] cuando recomiendes un producto, para que la app muestre la tarjeta.
 Productos relevantes (JSON):

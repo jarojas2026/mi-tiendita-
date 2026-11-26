@@ -42,7 +42,7 @@ export default function Assistant({ open, onClose }: { open: boolean; onClose: (
   const { products, byId, misPedidos, user, addToCart, loading } = useStore()
   const modoLLM = Boolean(config.aiProxyUrl)
   const [msgs, setMsgs] = useState<Msg[]>(() => {
-    try { const h = JSON.parse(sessionStorage.getItem(HIST_KEY) || '[]') as { de: Msg['de']; texto: string; ids?: string[] }[]; if (h.length) return h.map((m) => ({ id: seq++, de: m.de, texto: m.texto, productos: [] })) } catch { /* nada */ }
+    try { const h = JSON.parse(sessionStorage.getItem(HIST_KEY) || '[]') as { de: Msg['de']; texto: string; ids?: string[] }[]; if (h.length) return h.map((m) => ({ id: seq++, de: m.de, texto: m.texto, productos: (m.ids ?? []).map((id) => byId[id]).filter((p): p is Product => !!p) })) } catch { /* nada */ }
     return [{ id: seq++, de: 'bot', texto: `¡Hola! 👋 Soy el **Asistente Tiendita**. Preguntame por productos, precios, regalos, envío o tu pedido.` }]
   })
   const [q, setQ] = useState('')
@@ -52,7 +52,7 @@ export default function Assistant({ open, onClose }: { open: boolean; onClose: (
 
   useEffect(() => { fin.current?.scrollIntoView({ behavior: 'smooth', block: 'end' }) }, [msgs, pensando])
   useEffect(() => { if (open) setTimeout(() => input.current?.focus(), 60) }, [open])
-  useEffect(() => { sessionStorage.setItem(HIST_KEY, JSON.stringify(msgs.slice(-20).map((m) => ({ de: m.de, texto: m.texto })))) }, [msgs])
+  useEffect(() => { sessionStorage.setItem(HIST_KEY, JSON.stringify(msgs.slice(-20).map((m) => ({ de: m.de, texto: m.texto, ids: m.productos?.map((p) => p.id) })))) }, [msgs])
   useEffect(() => {
     if (!open) return
     const f = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
@@ -126,6 +126,11 @@ export default function Assistant({ open, onClose }: { open: boolean; onClose: (
         )}
         <div ref={fin} />
       </div>
+      {msgs.length > 1 && (
+        <div className="no-scrollbar flex gap-1.5 overflow-x-auto border-t border-line bg-surface px-2.5 pt-2" data-testid="chips-sugerencias">
+          {SUGERENCIAS.map((s) => <button key={s} onClick={() => enviar(s)} disabled={pensando} className="shrink-0 whitespace-nowrap rounded-full bg-surface-2 px-3 py-1 text-xs font-semibold text-ink ring-1 ring-line">{s}</button>)}
+        </div>
+      )}
 
       <form onSubmit={(e) => { e.preventDefault(); enviar(q) }} className="flex items-center gap-2 border-t border-line bg-surface p-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))]">
         <input ref={input} value={q} onChange={(e) => setQ(e.target.value)} placeholder={loading ? 'Cargando catálogo…' : 'Escribí tu pregunta…'} aria-label="Mensaje para el asistente" data-testid="chat-input"

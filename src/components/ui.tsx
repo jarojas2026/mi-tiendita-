@@ -13,6 +13,7 @@ import type { Product } from '../types'
 export function Header() {
   const { cartCount, user, api } = useStore()
   const tema = useTema()
+  const loc = useLocation()
   return (
     <header id="app-header" className="sticky top-0 z-30 bg-brand-800 text-white shadow-lg shadow-brand-900/20">
       {api?.modo === 'demo' && (
@@ -39,6 +40,11 @@ export function Header() {
             </Link>
           </div>
         </div>
+        <nav aria-label="Secciones" data-testid="menu-secciones" className="no-scrollbar -mx-1 mt-2 flex gap-1 overflow-x-auto text-sm font-semibold">
+          {[['/', 'Inicio'], ['/catalogo', 'Catálogo'], ['/catalogo?cat=finca', 'Finca'], ['/favoritos', 'Favoritos'], ['/carrito', 'Carrito']].map(([to, l]) => (
+            <Link key={to} to={to} aria-current={loc.pathname + loc.search === to ? 'page' : undefined} className={`shrink-0 whitespace-nowrap rounded-full px-3 py-1 hover:bg-white/15 ${loc.pathname + loc.search === to ? 'bg-white/20' : 'text-white/85'}`}>{l}</Link>
+          ))}
+        </nav>
       </div>
     </header>
   )
@@ -217,8 +223,8 @@ export function Insignias({ p }: { p: Product }) {
 export function Precio({ p, big }: { p: Product; big?: boolean }) {
   return (
     <div className={big ? 'text-3xl' : 'text-[17px]'}>
-      <span className={`font-extrabold tracking-tight ${p.precio == null ? 'text-sm text-muted' : 'text-ink'}`}>{colones(p.precio)}</span>
-      {p.precio != null && p.venta === 'kg' && <span className="text-xs font-semibold text-muted"> / kg</span>}
+      <span className="whitespace-nowrap"><span className={`font-extrabold tracking-tight ${p.precio == null ? 'text-sm text-muted' : 'text-ink'}`}>{colones(p.precio)}</span>
+      {p.precio != null && p.venta === 'kg' && <span className="text-xs font-semibold text-muted">{'\u00a0'}/{'\u00a0'}kg</span>}</span>
       {p.precioAntes && p.precio != null && p.precioAntes > p.precio && (
         <span className="ml-1.5 text-xs text-muted line-through">{colones(p.precioAntes)}</span>
       )}

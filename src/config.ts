@@ -78,10 +78,11 @@ export const config = {
   //  venta: 'kg' (precio por kilo) o 'paquete' (precio por unidad de venta)
   //  paso: de cuánto en cuánto se puede pedir (0.5 = medios kilos)
   finca: [
-    { id: 'finca-queso-tierno', nombre: 'Queso tierno de la finca', precio: 4000, icono: '🧀', venta: 'kg', unidad: 'por kg', paso: 0.5, nota: 'El precio puede variar a ₡4.500 por kg.' },
-    { id: 'finca-natilla', nombre: 'Natilla casera', precio: 2000, icono: '🥣', venta: 'kg', unidad: 'por kg', paso: 0.5 },
+    { id: 'finca-queso-tierno', nombre: 'Queso tierno de la finca', precio: 4000, icono: '🧀', venta: 'kg', unidad: 'por kg', paso: 0.5, imagen: 'img/finca/queso-tierno.webp', miniatura: 'img/finca/queso-tierno-t.webp', imagenJpg: 'img/finca/queso-tierno.jpg', nota: 'El precio puede variar a ₡4.500 por kg.' },
+    { id: 'finca-natilla', nombre: 'Natilla casera', precio: 2000, icono: '🥣', venta: 'kg', unidad: 'por kg', paso: 0.5, imagen: 'img/finca/natilla.webp', miniatura: 'img/finca/natilla-t.webp', imagenJpg: 'img/finca/natilla.jpg' },
     { id: 'finca-leche', nombre: 'Leche fresca de la finca — 3 litros', precio: 2000, icono: '🥛', venta: 'paquete', unidad: '3 litros', paso: 1 },
     { id: 'finca-huevos-15', nombre: 'Huevos Palmital – cartón 15 unidades', precio: 1500, icono: '🥚', venta: 'paquete', unidad: 'cartón de 15', paso: 1, imagen: 'img/finca/huevos-carton-15.webp', miniatura: 'img/finca/huevos-carton-15-t.webp', imagenJpg: 'img/finca/huevos-carton-15.jpg', nota: 'Huevo rojo fresco de nuestras gallinas en Palmital.' },
+    { id: 'finca-huevos-30', nombre: 'Huevos Palmital – cartón 30 unidades', precio: 2500, icono: '🥚', venta: 'paquete', unidad: 'cartón de 30', paso: 1, imagen: 'img/finca/huevos-carton-30.webp', miniatura: 'img/finca/huevos-carton-30-t.webp', imagenJpg: 'img/finca/huevos-carton-30.jpg', nota: 'Huevo rojo fresco de nuestras gallinas en Palmital.' },
     { id: 'finca-huevos-20', nombre: 'Huevos Palmital – bolsa 20 unidades', precio: 1500, icono: '🥚', venta: 'paquete', unidad: 'bolsa de 20', paso: 1, imagen: 'img/finca/huevos-bolsa-20.webp', miniatura: 'img/finca/huevos-bolsa-20-t.webp', imagenJpg: 'img/finca/huevos-bolsa-20.jpg', nota: 'Huevo fresco de Granja Palmital, en bolsa práctica.' },
   ] as { id: string; nombre: string; precio: number; icono: string; venta: 'kg' | 'paquete'; unidad: string; paso: number; nota?: string; imagen?: string; miniatura?: string; imagenJpg?: string }[],
   fincaCategoria: 'Productos de finca',
@@ -131,7 +132,7 @@ export const config = {
   // Carrusel del inicio (orden = orden de aparición). dest = id de config.destacadas, cat = categoría.
   banners: [
     { id: 'navidad', titulo: 'Regalos de Navidad', texto: 'Juguetes, medias, audífonos y luces para regalar. Pedí con tiempo: lo bajo pedido tarda 3 a 5 días hábiles.', cta: 'Ver regalos', link: '/catalogo?dest=juguetes', tono: 'navidad', icono: '🎁', fotos: 'juguetes' },
-    { id: 'finca', titulo: 'De nuestra finca a tu mesa', texto: 'Huevos Palmital (cartón de 15 o bolsa de 20 a ₡1.500), queso tierno, natilla y leche fresca. Hecho en Pérez Zeledón.', cta: 'Ver productos de la finca', link: '/catalogo?cat=finca', tono: 'finca', icono: '🥚', fotos: '', foto: 'img/finca/gallinas.webp' },
+    { id: 'finca', titulo: 'De nuestra finca a tu mesa', texto: 'Huevos Palmital (cartón de 30 a ₡2.500, bolsa de 20 a ₡1.500), queso tierno, natilla y leche fresca. Hecho en Pérez Zeledón.', cta: 'Ver productos de la finca', link: '/catalogo?cat=finca', tono: 'finca', icono: '🥚', fotos: '', foto: 'img/finca/gallinas.webp' },
     { id: 'escolar', titulo: 'Útiles escolares', texto: 'Cuadernos, lápices, bultos y loncheras para arrancar el curso lectivo con todo.', cta: 'Ver útiles', link: '/catalogo?dest=escolar', tono: 'escolar', icono: '✏️', fotos: 'escolar' },
   ],
 

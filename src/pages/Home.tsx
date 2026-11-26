@@ -67,6 +67,10 @@ function Hero({ fotos }: { fotos: Record<string, Product[]> }) {
           )
         })}
       </div>
+      {n > 1 && <>
+        <button onClick={() => ir((i - 1 + n) % n)} aria-label="Anterior" data-testid="carrusel-prev" className="absolute top-1/2 left-2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/30 text-xl font-bold text-white backdrop-blur hover:bg-black/50">‹</button>
+        <button onClick={() => ir((i + 1) % n)} aria-label="Siguiente" data-testid="carrusel-next" className="absolute top-1/2 right-2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/30 text-xl font-bold text-white backdrop-blur hover:bg-black/50">›</button>
+      </>}
       <div className="absolute inset-x-0 bottom-3 flex justify-center gap-1.5">
         {config.banners.map((b, k) => (
           <button key={b.id} onClick={() => ir(k)} aria-label={`Ver ${b.titulo}`} aria-current={i === k}
@@ -77,11 +81,11 @@ function Hero({ fotos }: { fotos: Record<string, Product[]> }) {
   )
 }
 
-const BENEFICIOS = [
+const BENEFICIOS: { icono: string; t: string; s: string; destacado?: boolean; href?: string }[] = [
   { icono: '🚚', t: 'Envío gratis en San Isidro', s: 'Centro de San Isidro de El General', destacado: true },
   { icono: '📱', t: 'SINPE o efectivo', s: 'Pagás al recibir o por SINPE' },
   { icono: '🏡', t: 'Retiro gratis', s: 'En la tienda, Palmital de Rivas' },
-  { icono: '💬', t: 'Pedí por WhatsApp', s: `Te atendemos al ${config.whatsappVisible}` },
+  { icono: '💬', t: 'Pedí por WhatsApp', s: `Te atendemos al ${config.whatsappVisible}`, href: `https://wa.me/${config.whatsapp}` },
 ]
 
 export default function Home() {
@@ -112,12 +116,16 @@ export default function Home() {
 
       {/* Beneficios */}
       <div className="no-scrollbar -mx-3 mt-4 flex gap-2 overflow-x-auto px-3 sm:grid sm:grid-cols-4" data-testid="beneficios">
-        {BENEFICIOS.map((b) => (
-          <div key={b.t} className={`flex min-w-[210px] items-center gap-3 rounded-2xl p-3 ring-1 sm:min-w-0 ${b.destacado ? 'bg-accent-50 ring-accent-200 dark:bg-accent-700/20 dark:ring-accent-700' : 'bg-surface ring-line'}`}>
+        {BENEFICIOS.map((b) => {
+          const cls = `flex min-w-[210px] items-center gap-3 rounded-2xl p-3 ring-1 sm:min-w-0 ${b.destacado ? 'bg-accent-50 ring-accent-200 dark:bg-accent-700/20 dark:ring-accent-700' : 'bg-surface ring-line'}`
+          const body = (<>
             <span className="text-2xl" aria-hidden="true">{b.icono}</span>
             <span className="leading-tight"><b className="block text-sm">{b.t}</b><span className="text-xs text-muted">{b.s}</span></span>
-          </div>
-        ))}
+          </>)
+          return b.href
+            ? <a key={b.t} href={b.href} target="_blank" rel="noreferrer" data-testid="beneficio-whatsapp" className={`${cls} hover:ring-brand-500`}>{body}</a>
+            : <div key={b.t} className={cls}>{body}</div>
+        })}
       </div>
 
       {/* Chips de categoría */}
@@ -134,11 +142,11 @@ export default function Home() {
         <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-6" data-testid="destacadas">
           {destacadas.map((d) => (
             <Link key={d.id} to={`/catalogo?dest=${d.id}`} className="group flex flex-col items-center rounded-2xl bg-surface p-2.5 text-center shadow-card ring-1 ring-line transition-shadow hover:shadow-lift">
-              <span className="h-16 w-16 overflow-hidden rounded-full bg-surface-2 ring-2 ring-accent-200 dark:ring-accent-700">
+              <span className="h-20 w-20 overflow-hidden rounded-full sm:h-24 sm:w-24 bg-surface-2 ring-2 ring-accent-200 dark:ring-accent-700">
                 {d.portada && <img src={imgUrl(d.portada)} alt="" loading="lazy" className="h-full w-full object-cover transition group-hover:scale-110" />}
               </span>
-              <span className="mt-1.5 text-[12.5px] leading-tight font-bold text-ink">{d.titulo}</span>
-              <span className="text-[10.5px] text-muted">{d.total} productos</span>
+              <span className="mt-1.5 text-[12.5px] leading-tight font-bold text-ink">{d.titulo}</span>{' '}
+              <span className="text-[10.5px] text-muted">· {d.total} productos</span>
             </Link>
           ))}
         </div>
@@ -158,7 +166,7 @@ export default function Home() {
             <div>
               <span className="inline-flex items-center gap-1 rounded-full bg-brand-600 px-2.5 py-1 text-[11px] font-extrabold tracking-wide text-white uppercase"><Icon name="leaf" size={14} /> Productos de finca</span>
               <h2 className="mt-2 text-[28px] leading-tight font-bold text-earth-900 dark:text-earth-50">De nuestra granja a tu mesa</h2>
-              <p className="mt-2 max-w-xl text-sm text-earth-700 dark:text-earth-200">Huevos Palmital frescos —cartón de 15 o bolsa de 20, a {'₡'}1.500— y lácteos de la lechería de la familia. Sin intermediarios, directo de Pérez Zeledón.</p>
+              <p className="mt-2 max-w-xl text-sm text-earth-700 dark:text-earth-200">Huevos Palmital frescos —cartón de 30 a {'₡'}2.500 o bolsa de 20 a {'₡'}1.500— y lácteos de la lechería de la familia. Sin intermediarios, directo de Pérez Zeledón.</p>
             </div>
             <ul className="flex flex-wrap gap-2 text-sm text-earth-800 dark:text-earth-100">
               <li className="rounded-full bg-white/70 px-3 py-1 dark:bg-black/20">🥚 Recogidos cada día</li>

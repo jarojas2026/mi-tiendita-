@@ -34,7 +34,7 @@ export default function Cart() {
               <Link to={`/p/${p.id}`} className="w-20 shrink-0 overflow-hidden rounded-xl"><ProductImage p={p} thumb /></Link>
               <div className="flex min-w-0 flex-1 flex-col gap-1.5">
                 <Link to={`/p/${p.id}`} className="line-clamp-2 text-sm font-medium">{p.nombre}</Link>
-                <div className="flex items-center gap-2 text-sm"><Badge p={p} /><span className="font-bold">{colones(p.precio)}{p.venta === 'kg' ? ' / kg' : ''}</span></div>
+                <div className="flex items-center gap-2 text-sm"><Badge p={p} /><span className="whitespace-nowrap font-bold">{colones(p.precio)}{p.venta === 'kg' ? ' / kg' : ''}</span></div>
                 <div className="flex items-center justify-between gap-2">
                   <QtyStepper p={p} qty={item.qty} onChange={(q) => setQty(p.id, q)} />
                   <span className="text-sm font-extrabold">{colones(p.precio == null ? null : p.precio * item.qty)}</span>
