@@ -139,8 +139,10 @@ export function responderLocal(qRaw: string, ctx: Contexto): Respuesta {
   }
 
   // ---- Saludo / gracias ----
-  if (/^(hola|buenas|buenos dias|buenas tardes|buenas noches|pura vida|upe|hey)\b/.test(t) && t.split(' ').length <= 4) {
-    return { intent: 'saludo', texto: `¡Hola! 👋 Soy el Asistente Tiendita. Te ayudo a encontrar productos, ver precios, calcular el envío o saber cómo va tu pedido. ¿Qué andás buscando?` }
+  // Saludo solo si no viene una búsqueda dentro ("hola, busco audífonos" → busca)
+  if (/^(hola|buenas|buenos dias|buenas tardes|buenas noches|pura vida|upe|hey)\b/.test(t) && !terminos(q.replace(/pura vida|upe|hey/gi, ''))) {
+    const destacados = products.filter((p) => !p.oculto && p.precio != null && (p.finca || p.oferta)).slice(0, 6)
+    return { intent: 'saludo', texto: `¡Hola! 👋 Soy el Asistente Tiendita. Decime qué buscás (ej.: “audífonos”, “queso”, “regalo para niño”) y te muestro precios y enlaces.${destacados.length ? ' Mientras tanto, algunos productos de la tienda:' : ''}`, productos: destacados, acciones: [{ label: 'Ver catálogo', to: '/catalogo' }] }
   }
   if (/^(gracias|muchas gracias|tuanis|perfecto|listo|ok|dale)\b/.test(t)) return { intent: 'gracias', texto: '¡Con mucho gusto! 🌱 Cualquier cosa aquí estoy.' }
 
@@ -162,7 +164,7 @@ export function responderLocal(qRaw: string, ctx: Contexto): Respuesta {
     return { intent: 'sin-resultados', texto: `No encontré “${qProd}”${max ? ` por menos de ${colones(max)}` : ''} en el catálogo. Podés preguntarnos por WhatsApp: a veces lo conseguimos bajo pedido.`, acciones: [{ label: 'Preguntar por WhatsApp', href: `https://wa.me/${config.whatsapp}?text=${encodeURIComponent(`Hola, ¿tienen ${qProd}?`)}` }] }
   }
 
-  return { intent: 'ayuda', texto: 'Puedo ayudarte con: buscar productos y precios, ideas de regalo con presupuesto, envío y zonas, formas de pago, horario y el estado de tu pedido. Probá: “regalo para niña de 5 años por menos de ₡5.000”.' }
+  return { intent: 'ayuda', productos: products.filter((p) => !p.oculto && p.precio != null && p.oferta).slice(0, 6), acciones: [{ label: 'Ver catálogo', to: '/catalogo' }], texto: 'Puedo ayudarte con: buscar productos y precios, ideas de regalo con presupuesto, envío y zonas, formas de pago, horario y el estado de tu pedido. Probá: “regalo para niña de 5 años por menos de ₡5.000”.' }
 }
 
 export const SUGERENCIAS = ['Regalo para niña de 5 años por menos de ₡5.000', '¿Cuánto cuesta el cartón de huevos?', 'Audífonos baratos', '¿Hacen envíos a San Isidro?', '¿Cómo va mi pedido?', '¿Cuál es el horario?']
