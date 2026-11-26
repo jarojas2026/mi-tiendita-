@@ -230,7 +230,7 @@ export function Nosotros() {
         <p><Completar>breve historia de la familia y la tienda</Completar></p>
       </Seccion>
       <Seccion titulo="Granja Palmital">
-        <p>Tenemos cerca de 170 gallinas en Palmital de Rivas.</p>
+        <p>Tenemos gallinas en Palmital de Rivas <Completar>confirmar cantidad de gallinas</Completar>.</p>
         <p>Los huevos se recogen cada día y llegan frescos a tu mesa.</p>
         <div className="grid grid-cols-2 gap-2.5 pt-2">
           {FOTOS.map((f) => (
@@ -242,7 +242,7 @@ export function Nosotros() {
       </Seccion>
       <Seccion titulo="Nuestra lechería">
         <p>La familia también hace queso, natilla y leche fresca.</p>
-        <p>La lechería cuenta con Certificado Veterinario de Operación (CVO) del SENASA.</p>
+        <p>La lechería cuenta con Certificado Veterinario de Operación (CVO) del SENASA <Completar>confirmar CVO y qué productos cubre</Completar>.</p>
       </Seccion>
       <Seccion titulo="Por qué comprarnos">
         <ul className="list-disc space-y-1 pl-5">
