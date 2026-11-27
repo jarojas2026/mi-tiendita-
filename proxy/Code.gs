@@ -9,7 +9,7 @@
  * text/plain (sin "preflight") y aquí se aplica un rate-limit global y límites de tamaño.
  */
 var GROQ_URL = 'https://api.groq.com/openai/v1/chat/completions';
-var MODELO = 'llama-3.1-8b-instant'; // revisá los vigentes en https://console.groq.com/docs/models
+var MODELO = 'openai/gpt-oss-120b'; // revisá los vigentes en https://console.groq.com/docs/models
 var MAX_BODY = 24 * 1024;
 var MAX_MSGS = 12;
 var MAX_CHARS = 6000;

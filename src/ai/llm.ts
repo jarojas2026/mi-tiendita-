@@ -60,7 +60,7 @@ export async function preguntarLLM(historial: ChatMsg[], products: Product[], by
   const ultima = [...historial].reverse().find((m) => m.role === 'user')?.content ?? ''
   const ctx = contextoProductos(products, ultima)
   const body = {
-    model: 'llama-3.1-8b-instant', // el proxy puede forzar otro modelo vigente
+    model: 'openai/gpt-oss-120b', // el proxy puede forzar otro modelo vigente
     temperature: 0.4,
     max_tokens: 400,
     messages: [{ role: 'system', content: sistema(ctx) }, ...historial.slice(-8)],

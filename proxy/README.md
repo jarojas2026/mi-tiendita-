@@ -96,7 +96,7 @@ Creá `proxy/.dev.vars` (está en `.gitignore`) con valores de prueba y, si quer
 
 ## Configuración (`wrangler.toml`)
 - `ALLOWED_ORIGINS`: dominios del chat web (Firebase Hosting `.web.app` y `.firebaseapp.com`, y GitHub Pages).
-- `MODEL`: `llama-3.1-8b-instant` por defecto (≈8.000 tokens/min gratis). `openai/gpt-oss-120b` también funcionó. Modelos vigentes: <https://console.groq.com/docs/models>.
+- `MODEL`: `openai/gpt-oss-120b` por defecto (≈8.000 tokens/min gratis). `openai/gpt-oss-120b` también funcionó. Modelos vigentes: <https://console.groq.com/docs/models>.
 - `GRAPH_VERSION`: versión de la Graph API de Meta (`v23.0`).
 
 ## Opción B — Google Apps Script (solo chat web, sin WhatsApp)

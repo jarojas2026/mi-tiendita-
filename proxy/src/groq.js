@@ -13,7 +13,7 @@ const dormir = (ms) => new Promise((r) => setTimeout(r, ms))
  */
 export async function llamarGroq(env, payload, { fetchFn = fetch, timeoutMs = 20000, reintentos = 1 } = {}) {
   if (!env.GROQ_API_KEY) throw new ErrorIA('Falta el secreto GROQ_API_KEY', 500)
-  const body = JSON.stringify({ model: env.MODEL || 'llama-3.1-8b-instant', temperature: 0.4, max_tokens: 400, ...payload })
+  const body = JSON.stringify({ model: env.MODEL || 'openai/gpt-oss-120b', temperature: 0.4, max_tokens: 400, ...payload })
   for (let intento = 0; ; intento++) {
     const ctl = new AbortController()
     const timer = setTimeout(() => ctl.abort(), timeoutMs)

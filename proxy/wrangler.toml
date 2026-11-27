@@ -7,9 +7,9 @@ compatibility_date = "2025-01-01"
 [vars]
 # Dominios que pueden usar el chat web (separados por coma).
 ALLOWED_ORIGINS = "https://mi-tiendita-digital-b9835.web.app,https://mi-tiendita-digital-b9835.firebaseapp.com,https://jarojas2026.github.io"
-# Modelo de Groq. llama-3.1-8b-instant es el más liviano (≈8.000 tokens/min gratis).
+# Modelo de Groq. openai/gpt-oss-120b es el más liviano (≈8.000 tokens/min gratis).
 # Alternativa que ya funcionó: openai/gpt-oss-120b. Vigentes: https://console.groq.com/docs/models
-MODEL = "llama-3.1-8b-instant"
+MODEL = "openai/gpt-oss-120b"
 # Versión de la Graph API de Meta
 GRAPH_VERSION = "v23.0"
 
