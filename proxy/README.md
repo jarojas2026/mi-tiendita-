@@ -1,4 +1,4 @@
-# Agente de IA de Mi Tiendita Digital — web + WhatsApp (Cloudflare Worker, gratis)
+# Agente de IA de La Tiendita de Jade — web + WhatsApp (Cloudflare Worker, gratis)
 
 Un solo **Cloudflare Worker** (plan Workers Free, sin tarjeta) hace tres cosas:
 
@@ -66,9 +66,9 @@ Luego `npm run build` y `firebase deploy --only hosting`. El chat de la tienda d
 ## Paso 2 — Meta (WhatsApp Cloud API)
 > ⚠️ **El número 8769-2109 deja de funcionar en la app WhatsApp Business** cuando se registra en la API (los chats pasan a la bandeja de la tienda). **Antes**, en la app: *Configuración › Chats › Copia de seguridad* y exportá los chats importantes. Si al registrar Meta te ofrece "conectar tu app de WhatsApp Business existente" (coexistencia), leé bien qué conserva antes de aceptar.
 
-1. Entrá a <https://developers.facebook.com> con la cuenta de Facebook del negocio → **Mis apps › Crear app** → tipo **Empresa (Business)** → elegí el portafolio **Mi Tiendita Digital**.
+1. Entrá a <https://developers.facebook.com> con la cuenta de Facebook del negocio → **Mis apps › Crear app** → tipo **Empresa (Business)** → elegí el portafolio **La Tiendita de Jade**.
 2. En la app: **Agregar producto › WhatsApp › Configurar**.
-3. **WhatsApp › Configuración de la API › Agregar número de teléfono**: nombre visible "Mi Tiendita Digital", categoría, número **+506 8769-2109** (antes eliminá la cuenta en la app WhatsApp Business del cel: *Configuración › Cuenta › Eliminar cuenta*, después del respaldo). Verificá con el código por SMS o llamada.
+3. **WhatsApp › Configuración de la API › Agregar número de teléfono**: nombre visible "La Tiendita de Jade", categoría, número **+506 8769-2109** (antes eliminá la cuenta en la app WhatsApp Business del cel: *Configuración › Cuenta › Eliminar cuenta*, después del respaldo). Verificá con el código por SMS o llamada.
 4. Copiá el **Identificador del número de teléfono** → `npx wrangler secret put WA_PHONE_NUMBER_ID`.
 5. **Clave secreta de la app**: *Configuración de la app › Básica › Clave secreta* → **Mostrar** → `npx wrangler secret put WA_APP_SECRET`.
 6. **Token permanente** (el temporal vence en 24 h): <https://business.facebook.com/settings> → **Usuarios › Usuarios del sistema › Agregar** (rol Administrador) → **Asignar activos**: la app (control total) y la cuenta de WhatsApp → **Generar token** → elegí la app, vencimiento **Nunca**, permisos `whatsapp_business_messaging` y `whatsapp_business_management` → copiá → `npx wrangler secret put WA_TOKEN`.

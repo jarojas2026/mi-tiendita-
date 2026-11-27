@@ -5,7 +5,7 @@
 /* Modo oscuro por clase (.dark en <html>), respetando la preferencia del sistema al inicio */
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* ============ Identidad "Mi Tiendita · Rivas" ============
+/* ============ Identidad "La Tiendita de Jade · Rivas" ============
    Verde finca (cafetales y potreros de Rivas), tierra (barro y madera), acento mango cálido. */
 @theme {
   --color-brand-50: #eef6ef;

@@ -47,7 +47,7 @@ export function Icon({ name, size = 20, className = '', filled, ...rest }: { nam
   )
 }
 
-/** Logo "Mi Tiendita Digital": techito de pulpería + hoja de la finca. */
+/** Logo "La Tiendita de Jade": techito de pulpería + hoja de la finca. */
 export function Logo({ compact, className = '' }: { compact?: boolean; className?: string }) {
   return (
     <span className={`inline-flex items-center gap-2 ${className}`}>
@@ -60,8 +60,8 @@ export function Logo({ compact, className = '' }: { compact?: boolean; className
       </svg>
       {!compact && (
         <span className="leading-none">
-          <span className="block font-display text-[19px] font-bold tracking-tight">Mi Tiendita</span>
-          <span className="block text-[10.5px] font-semibold uppercase tracking-[0.18em] text-accent-300">Digital · Pérez Zeledón</span>
+          <span className="block font-display text-[19px] font-bold tracking-tight">La Tiendita de Jade</span>
+          <span className="block text-[10.5px] font-semibold uppercase tracking-[0.18em] text-accent-300">Pérez Zeledón</span>
         </span>
       )}
     </span>

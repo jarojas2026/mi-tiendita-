@@ -105,7 +105,7 @@ export const ESTADO_INFO: Record<EstadoPedido, { titulo: string; texto: string; 
   nuevo: { titulo: 'Pedido recibido', texto: 'Lo recibimos y lo vamos a revisar.', icono: '🧾', color: '#2563eb' },
   confirmado: { titulo: 'Confirmado', texto: 'Confirmamos productos, pago y hora de entrega.', icono: '✅', color: '#4f46e5' },
   'en camino': { titulo: 'En camino', texto: 'Tu pedido salió de la tienda y va hacia vos.', icono: '🛵', color: '#9333ea' },
-  entregado: { titulo: 'Entregado', texto: '¡Gracias por comprar en Mi Tiendita Digital!', icono: '🎉', color: '#16a34a' },
+  entregado: { titulo: 'Entregado', texto: '¡Gracias por comprar en La Tiendita de Jade!', icono: '🎉', color: '#16a34a' },
   cancelado: { titulo: 'Cancelado', texto: 'Este pedido fue cancelado. Escribinos si fue un error.', icono: '✖️', color: '#6b7280' },
 }
 /** Convierte estados de la v3 (recibido, pedido al proveedor, en ruta) a los de la v4. */

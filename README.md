@@ -1,4 +1,4 @@
-# Mi Tiendita 🛒 — Rivas, Pérez Zeledón (v3)
+# La Tiendita de Jade 🛒 — Rivas, Pérez Zeledón (v3)
 
 App web (PWA) de pulpería y bazar: catálogo, carrito, cuentas de clientes, checkout con zona/fecha/franja
 y **ubicación en mapa**, pedido por WhatsApp, historial con **Repetir pedido**, favoritos, recomendaciones,
@@ -6,7 +6,7 @@ y **ubicación en mapa**, pedido por WhatsApp, historial con **Repetir pedido**,
 Hecha con Vite + React + TypeScript + Tailwind. Costo: **₡0** (todo en planes gratis, sin claves en el navegador).
 
 ## Novedades v3
-- **Diseño nuevo, móvil primero**: identidad "Mi Tiendita · Rivas" (verde finca + tierra + acento mango),
+- **Diseño nuevo, móvil primero**: identidad "La Tiendita de Jade · Rivas" (verde finca + tierra + acento mango),
   tipografías Fraunces + Plus Jakarta Sans empaquetadas con `@fontsource` (sin CDN), logo SVG, carrusel
   (Navidad / De nuestra finca / Útiles escolares), chips de categoría con íconos, tarjetas con skeleton,
   insignias *De la finca / Oferta / Bajo pedido*, estados vacíos ilustrados, **modo oscuro**, foco visible y

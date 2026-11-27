@@ -1,4 +1,4 @@
-// Cloudflare Worker de Mi Tiendita Digital (plan Workers Free, sin tarjeta).
+// Cloudflare Worker de La Tiendita de Jade (plan Workers Free, sin tarjeta).
 //  - POST /chat      → chat de la tienda web (proxy a Groq; la clave vive solo aquí como secreto)
 //  - GET/POST /whatsapp → agente de WhatsApp Cloud API (memoria en KV, pedidos, pasar a humano)
 //  - /admin/api/*    → bandeja de Gabriel (protegida con el secreto ADMIN_KEY)

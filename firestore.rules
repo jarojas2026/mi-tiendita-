@@ -1,5 +1,5 @@
 rules_version = '2';
-// Mi Tiendita Digital — reglas de Firestore v5 (proyecto mi-tiendita-digital-b9835, plan Spark).
+// La Tiendita de Jade — reglas de Firestore v5 (proyecto mi-tiendita-digital-b9835, plan Spark).
 // Pegar completo en Consola Firebase > Firestore Database > Reglas > Publicar.
 //  - Admins: correos fijos en isAdmin() (cuenta Google con correo verificado).
 //  - orders: el cliente con cuenta crea y lee SOLO los suyos; el invitado (sin cuenta) solo puede crear.

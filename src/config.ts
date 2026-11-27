@@ -7,7 +7,7 @@ import type { ZonaCfg } from './types'
 
 export const config = {
   // Marca
-  storeName: 'Mi Tiendita Digital',
+  storeName: 'La Tiendita de Jade',
   slogan: 'Tu pulpería y bazar en línea con entrega en Pérez Zeledón',
   ubicacion: 'Pérez Zeledón, San José, Costa Rica',
   email: 'pulperiaybazardigital@gmail.com',
@@ -105,7 +105,7 @@ export const config = {
   // ---------- v3: ubicación de la tienda y envío por distancia ----------
   // Coordenadas APROXIMADAS de Palmital de Rivas (OpenStreetMap, nodo "Palmital" 9.47732, -83.65864).
   // Cambialas por el punto exacto de la tienda: abrí Google Maps, mantené presionado sobre la tienda y copiá.
-  tienda: { lat: 9.4773, lng: -83.6586, nombre: 'Mi Tiendita Digital · Palmital de Rivas', aproximada: true },
+  tienda: { lat: 9.4773, lng: -83.6586, nombre: 'La Tiendita de Jade · Palmital de Rivas', aproximada: true },
 
   // Tramos de envío por distancia en línea recta desde la tienda (km). El primero que cumpla hastaKm gana.
   // zonaId = zona que se sugiere (y su tarifa). Si querés cobrar por distancia en vez de por zona,

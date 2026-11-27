@@ -127,7 +127,7 @@ export function crearApp(kb, opciones = {}) {
           return json(datos, st, h)
         }
         if (request.method === 'POST' && (url.pathname === '/chat' || url.pathname === '/')) return await chat(request, env, h)
-        if (request.method === 'GET' && url.pathname === '/') return json({ ok: true, servicio: 'Mi Tiendita Digital IA', productos: indice.length, kb: kb.generado }, 200, h)
+        if (request.method === 'GET' && url.pathname === '/') return json({ ok: true, servicio: 'La Tiendita de Jade IA', productos: indice.length, kb: kb.generado }, 200, h)
         return json({ error: 'No encontrado' }, 404, h)
       } catch (e) {
         console.error('Error', e?.message)
