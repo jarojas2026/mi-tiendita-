@@ -51,7 +51,7 @@ export default function AsistenteAdmin({ orders }: { orders: Order[] }) {
         <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Preguntá sobre pedidos, stock o redes…" aria-label="Pregunta para el asistente admin" className="flex-1 rounded-full border border-line bg-surface px-4 py-2 text-sm" />
         <button className="rounded-full bg-brand-600 px-4 font-bold text-white">Enviar</button>
       </form>
-      {!iaOn && <p className="text-[11px] text-muted">Modo IA apagado (gratis). Para activarlo hace falta desplegar el proxy de <code>worker/</code> con el OK de Gabriel.</p>}
+      {!iaOn && <p className="text-[11px] text-muted">Modo IA apagado (gratis). Para activarlo hace falta desplegar el Worker de <code>proxy/</code> (ver proxy/README.md).</p>}
     </Card>
   )
 }

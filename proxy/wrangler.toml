@@ -1,13 +1,24 @@
-# Cloudflare Worker del Asistente Tiendita (plan Workers Free: 100.000 solicitudes/día, sin tarjeta).
+# Cloudflare Worker de Mi Tiendita Digital (plan Workers Free: 100.000 solicitudes/día, sin tarjeta).
+# Chat web (/chat) + agente de WhatsApp (/whatsapp) + bandeja de Gabriel (/admin/api/*).
 name = "tiendita-ia"
 main = "worker.js"
 compatibility_date = "2025-01-01"
 
 [vars]
-# Dominios que pueden usar el proxy (separados por coma). Agregá tu dominio propio si lo tenés.
-ALLOWED_ORIGINS = "https://jarojas2026.github.io"
-# Modelo de Groq. Revisá los vigentes en https://console.groq.com/docs/models
+# Dominios que pueden usar el chat web (separados por coma).
+ALLOWED_ORIGINS = "https://mi-tiendita-digital-b9835.web.app,https://mi-tiendita-digital-b9835.firebaseapp.com,https://jarojas2026.github.io"
+# Modelo de Groq. llama-3.1-8b-instant es el más liviano (≈8.000 tokens/min gratis).
+# Alternativa que ya funcionó: openai/gpt-oss-120b. Vigentes: https://console.groq.com/docs/models
 MODEL = "llama-3.1-8b-instant"
+# Versión de la Graph API de Meta
+GRAPH_VERSION = "v23.0"
 
-# La clave NO va aquí. Se guarda como secreto:
-#   npx wrangler secret put GROQ_API_KEY
+# Memoria de conversaciones y pedidos (KV, plan gratis). Crealo con:
+#   npx wrangler kv namespace create CHATS
+# y pegá aquí el id que te devuelve (reemplazá el de ejemplo).
+[[kv_namespaces]]
+binding = "CHATS"
+id = "PEGAR_AQUI_EL_ID_DEL_KV"
+
+# Las claves NO van aquí. Se guardan como secretos (npx wrangler secret put NOMBRE):
+#   GROQ_API_KEY, WA_TOKEN, WA_APP_SECRET, WA_VERIFY_TOKEN, WA_PHONE_NUMBER_ID, ADMIN_KEY

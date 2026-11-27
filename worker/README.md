@@ -1,5 +1,7 @@
 # worker/groq-proxy.js — IA opcional de Mi Tiendita Digital (NO desplegado)
 
+> ⚠️ **Reemplazado por `proxy/`** (chat web + agente de WhatsApp + bandeja). Usá `proxy/README.md`; esta carpeta queda solo como referencia.
+
 La app funciona **sin IA** (asistente local por reglas + búsqueda en el catálogo, para clientes y admin).
 Este Worker es solo para activar el **modo IA** (Groq, modelo `llama-3.1-8b-instant`). **Costo: ₡0**
 (Cloudflare Workers Free: 100.000 solicitudes/día, sin tarjeta; Groq tiene capa gratis).

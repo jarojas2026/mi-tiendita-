@@ -2,10 +2,15 @@
 // que guarda la clave de Groq como secreto. El navegador NUNCA ve ninguna clave.
 // Formato: OpenAI Chat Completions (lo entiende Groq). Ver /proxy/README.md
 import { config, sinpeTexto } from '../config'
-import { colones } from '../lib/format'
+import { colones, nombreDia } from '../lib/format'
 import { buscar } from '../lib/search'
 import { regalos } from './local'
 import type { Product } from '../types'
+
+/** URL base del Worker (sin "/" final ni "/chat"). */
+export const baseProxy = (u: string) => u.trim().replace(/\/+$/, '').replace(/\/chat$/, '')
+/** El Worker atiende el chat en /chat; Google Apps Script (/exec) se usa tal cual. */
+export const urlChat = (u: string) => (/\/exec$/.test(u.trim()) ? u.trim() : baseProxy(u) + '/chat')
 
 export interface ChatMsg { role: 'system' | 'user' | 'assistant'; content: string }
 
@@ -34,9 +39,10 @@ Hablás español de Costa Rica con voseo, cálido y breve (máx. 4 frases). Prec
 Datos de la tienda:
 - Horario: ${config.horario}. WhatsApp: ${config.whatsappVisible}.
 - Pago: ${sinpeTexto()} o efectivo contra entrega. Bajo pedido: adelanto ${config.adelantoPct}% y llega en ${config.plazoBajoPedido}.
-- Zonas de envío: ${config.zonas.map((z) => `${z.nombre} (${z.tarifa == null ? 'cotizar' : z.tarifa === 0 ? 'gratis' : colones(z.tarifa)})`).join('; ')}. Envío GRATIS en San Isidro de El General centro.
+- ${config.envioGratisLanzamiento ? `Envío GRATIS en todas las zonas por promoción de lanzamiento (más adelante podría cobrarse). Entregas: ${config.diasEntregaLanzamiento.map(nombreDia).join(' y ')}.` : `Zonas de envío: ${config.zonas.map((z) => `${z.nombre} (${z.tarifa == null ? 'cotizar' : z.tarifa === 0 ? 'gratis' : colones(z.tarifa)})`).join('; ')}.`}
+- Cambios: ${config.politicaDevoluciones}
 - Productos de finca (Huevos Palmital cartón de 30 a ₡2.500 o bolsa de 20 a ₡1.500, queso ₡4.000/kg, natilla ₡2.000/kg, queso, natilla, leche) siempre en tienda.
-Reglas: recomendá SOLO productos de la lista; nunca inventes precios ni productos. Si no está, sugerí escribir por WhatsApp.
+Reglas: recomendá SOLO productos de la lista; nunca inventés precios, stock ni medidas. Si no sabés, decí "consultá con nosotros por WhatsApp".
 Mencioná el id entre corchetes así [id] cuando recomiendes un producto, para que la app muestre la tarjeta.
 Productos relevantes (JSON):
 ${JSON.stringify(productos.map((p) => ({ id: p.id, nombre: p.nombre, precio: p.precio, unidad: p.venta === 'kg' ? 'kg' : p.unidad ?? 'unidad', disponibilidad: p.disponibilidad, categoria: p.categoria })))}`
@@ -65,7 +71,7 @@ export async function preguntarLLM(historial: ChatMsg[], products: Product[], by
   const timer = setTimeout(() => ctl.abort(), 20000)
   let data: { choices?: { message?: { content?: string | null; tool_calls?: { function: { name: string; arguments: string } }[] } }[]; error?: unknown }
   try {
-    const r = await fetch(config.aiProxyUrl, {
+    const r = await fetch(urlChat(config.aiProxyUrl), {
       method: 'POST',
       // text/plain evita el "preflight" CORS (necesario para Google Apps Script)
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -103,7 +109,7 @@ export async function llmTexto(sistemaTxt: string, pedido: string, maxTokens = 4
   const ctl = new AbortController()
   const timer = setTimeout(() => ctl.abort(), 20000)
   try {
-    const r = await fetch(config.aiProxyUrl, {
+    const r = await fetch(urlChat(config.aiProxyUrl), {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ temperature: 0.6, max_tokens: maxTokens, messages: [{ role: 'system', content: sistemaTxt }, { role: 'user', content: pedido.slice(0, 5500) }] }),

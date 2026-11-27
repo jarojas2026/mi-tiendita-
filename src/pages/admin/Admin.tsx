@@ -21,10 +21,11 @@ const AsistenteAdmin = lazy(() => import('./AsistenteAdmin'))
 const Resumen = lazy(() => import('./Resumen'))
 const Tablero = lazy(() => import('./Tablero'))
 const Ajustes = lazy(() => import('./Ajustes'))
+const WhatsAppTab = lazy(() => import('./WhatsAppTab'))
 
 export default function Admin() {
   const { user, authReady, api, recargarOverrides } = useStore()
-  type Tab = 'resumen' | 'tablero' | 'pedidos' | 'mapa' | 'ruta' | 'clientes' | 'reportes' | 'asistente' | 'productos' | 'ajustes'
+  type Tab = 'resumen' | 'tablero' | 'pedidos' | 'mapa' | 'ruta' | 'clientes' | 'reportes' | 'asistente' | 'whatsapp' | 'productos' | 'ajustes'
   const [tab, setTab] = useState<Tab>('resumen')
   const [orders, setOrders] = useState<Order[]>([])
   const [vivo, setVivo] = useState(false)
@@ -58,7 +59,7 @@ export default function Admin() {
       </div>
       {errorDatos && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-800 dark:bg-red-900/30 dark:text-red-100">⚠️ No se pudieron leer los pedidos: {errorDatos} {api?.modo === 'firebase' && 'Revisá que las reglas de firestore.rules estén publicadas y que entraste con un correo admin.'}</p>}
       {aviso && <p role="status" onClick={() => setAviso('')} className="cursor-pointer rounded-xl bg-blue-50 p-2 text-sm text-blue-900 dark:bg-blue-900/30 dark:text-blue-100">{aviso} <span className="text-xs">(tocar para cerrar)</span></p>}
-      <div role="tablist" className="no-scrollbar flex gap-1 overflow-x-auto rounded-2xl bg-surface-2 p-1 ring-1 ring-line">{t('resumen', '📊 Resumen')}{t('tablero', '🗂️ Tablero')}{t('pedidos', 'Lista')}{t('mapa', '🗺️ Mapa')}{t('ruta', 'Ruta del día')}{t('clientes', 'Clientes')}{t('reportes', 'Reportes')}{t('asistente', '🤖 Asistente')}{t('productos', '🏷️ Productos')}{t('ajustes', '⚙️ Ajustes')}</div>
+      <div role="tablist" className="no-scrollbar flex gap-1 overflow-x-auto rounded-2xl bg-surface-2 p-1 ring-1 ring-line">{t('resumen', '📊 Resumen')}{t('tablero', '🗂️ Tablero')}{t('pedidos', 'Lista')}{t('mapa', '🗺️ Mapa')}{t('ruta', 'Ruta del día')}{t('clientes', 'Clientes')}{t('reportes', 'Reportes')}{t('asistente', '🤖 Asistente')}{t('whatsapp', '📱 WhatsApp')}{t('productos', '🏷️ Productos')}{t('ajustes', '⚙️ Ajustes')}</div>
       <Suspense fallback={<div className="skeleton h-64 rounded-2xl" />}>
         {tab === 'resumen' && <Resumen orders={orders} irA={setTab} />}
         {tab === 'ajustes' && <Ajustes />}
@@ -69,6 +70,7 @@ export default function Admin() {
         {tab === 'clientes' && <Clientes orders={orders} />}
         {tab === 'reportes' && <Reportes orders={orders} />}
         {tab === 'asistente' && <AsistenteAdmin orders={orders} />}
+        {tab === 'whatsapp' && <WhatsAppTab />}
         {tab === 'productos' && <Productos />}
       </Suspense>
     </div>
