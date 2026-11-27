@@ -111,7 +111,7 @@ export function responderLocal(qRaw: string, ctx: Contexto): Respuesta {
     const zonas = config.zonas.map((z) => `• ${z.nombre}: ${z.tarifa == null ? 'por cotizar' : z.tarifa === 0 ? 'GRATIS' : colones(z.tarifa)}`).join('\n')
     return {
       intent: 'envio',
-      texto: `🚚 Entregamos por zonas desde Palmital de Rivas:\n${zonas}\n\n🎉 **Envío gratis en San Isidro de El General (centro).** En el checkout podés tocar "Usar mi ubicación" y te calculo la zona y el envío por distancia.`,
+      texto: `🚚 Entregamos por zonas desde Palmital de Rivas:\n${zonas}\n\n🎉 **Promoción de lanzamiento: envío gratis a todas las zonas, entregas jueves y sábado.** En el checkout podés tocar "Usar mi ubicación" y te calculo la zona y el envío por distancia.`,
       acciones: [{ label: 'Abrir ubicación de la tienda', href: `https://www.google.com/maps/search/?api=1&query=${config.tienda.lat},${config.tienda.lng}` }],
     }
   }

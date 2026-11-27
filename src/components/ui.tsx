@@ -205,7 +205,7 @@ export function Footer() {
           <a href={`https://www.google.com/maps/search/?api=1&query=${config.tienda.lat},${config.tienda.lng}`} target="_blank" rel="noreferrer" className="flex items-start gap-2 hover:text-accent-300">
             <Icon name="pin" size={18} className="mt-0.5 shrink-0" /> Pérez Zeledón, San José, Costa Rica (retiro en Palmital de Rivas)
           </a>
-          <p className="flex items-center gap-2"><Icon name="truck" size={18} /> Envío por zona · gratis en San Isidro centro</p>
+          <p className="flex items-center gap-2"><Icon name="truck" size={18} /> Envío gratis por lanzamiento · jueves y sábado</p>
           <Link to="/ayuda" className="flex items-center gap-2 font-semibold hover:text-accent-300"><Icon name="card" size={18} /> Envíos, pagos y contacto</Link>
         </div>
       </div>

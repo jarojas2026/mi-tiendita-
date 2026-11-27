@@ -11,7 +11,7 @@ const DIAS = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', '
 const diasTexto = (d: number[]) => (d.length >= 6 ? 'lunes a sábado' : d.map((x) => DIAS[x]).join(', '))
 
 export default function Info() {
-  useSeo('Envíos, pagos y contacto', `Envío gratis en San Isidro centro, pago por SINPE Móvil ${config.sinpe.numero} o efectivo. WhatsApp ${config.whatsappVisible}.`)
+  useSeo('Envíos, pagos y contacto', `Envío gratis por lanzamiento (jueves y sábado), pago por SINPE Móvil ${config.sinpe.numero} o efectivo. WhatsApp ${config.whatsappVisible}.`)
   const { ajustes } = useStore()
   const zonas = ajustes.zonas.filter((z) => z.activa !== false)
   const tarifa = (t: number | null, gratis?: boolean, prov?: boolean) =>
@@ -30,9 +30,15 @@ export default function Info() {
         <p className="text-sm text-muted">También podés escribirnos directo por WhatsApp y te ayudamos a armar el pedido.</p>
       </Card>
 
+      <Card className="space-y-2">
+        <h2 className="text-lg font-bold" id="devoluciones">Cambios y devoluciones</h2>
+        <p className="text-sm">{config.politicaDevoluciones}</p>
+      </Card>
+
       <Card className="space-y-2" >
         <h2 className="text-lg font-bold" id="envios">Envíos y retiro</h2>
-        <p className="text-sm">Envío gratis en San Isidro de El General (centro). Retiro gratis en la tienda, en Palmital de Rivas.</p>
+        <p className="rounded-xl bg-brand-50 p-3 text-sm font-semibold text-brand-700">🎉 Promoción de lanzamiento: envío GRATIS a todas las zonas. Entregamos los jueves y sábados. Más adelante el envío podría tener costo.</p>
+        <p className="text-sm">También podés retirar gratis en la tienda, en Palmital de Rivas.</p>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead><tr className="border-b border-line text-muted"><th className="py-1.5 pr-2 font-semibold">Zona</th><th className="py-1.5 pr-2 font-semibold">Envío</th><th className="py-1.5 font-semibold">Días de ruta</th></tr></thead>
@@ -67,7 +73,7 @@ export default function Info() {
           <a href={`mailto:${config.email}`} className="rounded-full bg-surface-2 px-4 py-2 text-sm font-semibold ring-1 ring-line break-all">{config.email}</a>
           <a href={config.facebook} target="_blank" rel="noreferrer" className="rounded-full bg-surface-2 px-4 py-2 text-sm font-semibold ring-1 ring-line">Facebook</a>
         </div>
-        <p className="text-sm text-muted">{config.ubicacion}. Para consultas sobre un pedido, cambios o reclamos, escribinos por WhatsApp con tu número de pedido.</p>
+        <p className="text-sm text-muted">{config.ubicacion}. Para consultas sobre un pedido, escribinos por WhatsApp con tu número de pedido.</p>
       </Card>
     </div>
   )

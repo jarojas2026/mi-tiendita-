@@ -83,7 +83,7 @@ function Hero({ fotos }: { fotos: Record<string, Product[]> }) {
 }
 
 const BENEFICIOS: { icono: string; t: string; s: string; destacado?: boolean; href?: string }[] = [
-  { icono: '🚚', t: 'Envío gratis en San Isidro', s: 'Centro de San Isidro de El General', destacado: true },
+  { icono: '🚚', t: 'Envío gratis por lanzamiento', s: 'Entregas jueves y sábado en Pérez Zeledón', destacado: true },
   { icono: '📱', t: 'SINPE o efectivo', s: 'Pagás al recibir o por SINPE' },
   { icono: '🏡', t: 'Retiro gratis', s: 'En la tienda, Palmital de Rivas' },
   { icono: '💬', t: 'Pedí por WhatsApp', s: `Te atendemos al ${config.whatsappVisible}`, href: `https://wa.me/${config.whatsapp}` },

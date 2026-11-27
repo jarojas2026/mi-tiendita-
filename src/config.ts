@@ -39,6 +39,10 @@ export const config = {
 
   // Zonas de entrega. tarifa: null = "por cotizar".
   // diasRuta: 0=domingo, 1=lunes ... 6=sábado
+  // Promoción de lanzamiento: envío gratis en todas las zonas, entregas jueves y sábado.
+  envioGratisLanzamiento: true,
+  diasEntregaLanzamiento: [4, 6],
+  politicaDevoluciones: 'Aceptamos cambios únicamente por defectos de fábrica. Avisanos por WhatsApp dentro de los 3 días después de recibir el producto, con foto o video del defecto y tu número de pedido.',
   zonas: [
     { id: 'centro-rivas', nombre: 'Centro de Rivas', tarifa: 1000 as number | null, diasRuta: [1, 2, 3, 4, 5, 6] },
     { id: 'san-antonio', nombre: 'San Antonio / Pueblo Nuevo', tarifa: 1500 as number | null, diasRuta: [2, 4, 6] },
@@ -112,7 +116,7 @@ export const config = {
     { hastaKm: 8, zonaId: 'centro-rivas', texto: 'Centro de Rivas y alrededores' },
     { hastaKm: 12, zonaId: 'san-antonio', texto: 'San Antonio / Pueblo Nuevo' },
     { hastaKm: 18, zonaId: 'chimirol', texto: 'Chimirol / Guadalupe' },
-    { hastaKm: 9999, zonaId: 'herradura', texto: 'Lejos: el envío se cotiza por WhatsApp' },
+    { hastaKm: 9999, zonaId: 'herradura', texto: 'Zona lejana: confirmamos la entrega por WhatsApp' },
   ] as { hastaKm: number; zonaId: string; texto: string; tarifa?: number | null }[],
 
   // Zonas con envío GRATIS por cercanía a un punto (se revisan ANTES que los tramos de distancia).
