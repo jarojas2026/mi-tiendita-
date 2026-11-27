@@ -18,7 +18,7 @@ GRAPH_VERSION = "v23.0"
 # y pegá aquí el id que te devuelve (reemplazá el de ejemplo).
 [[kv_namespaces]]
 binding = "CHATS"
-id = "PEGAR_AQUI_EL_ID_DEL_KV"
+id = "3b5659e0137a4981b60ba89696f4f04d"
 
 # Las claves NO van aquí. Se guardan como secretos (npx wrangler secret put NOMBRE):
 #   GROQ_API_KEY, WA_TOKEN, WA_APP_SECRET, WA_VERIFY_TOKEN, WA_PHONE_NUMBER_ID, ADMIN_KEY
