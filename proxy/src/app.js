@@ -88,6 +88,11 @@ export function crearApp(kb, opciones = {}) {
     if (!(await firmaValida(bytes, request.headers.get('X-Hub-Signature-256'), env.WA_APP_SECRET))) return new Response('Firma inválida', { status: 401 })
     let body
     try { body = JSON.parse(crudo) } catch { return new Response('JSON inválido', { status: 400 }) }
+    try {
+      const ch = body?.entry?.[0]?.changes?.[0] || {}
+      const v = ch.value || {}
+      console.log('wa-in', JSON.stringify({ campo: ch.field, pnid: v.metadata?.phone_number_id, pnidOk: v.metadata?.phone_number_id === env.WA_PHONE_NUMBER_ID, msgs: (v.messages || []).length, estados: (v.statuses || []).map((x) => x.status + (x.errors ? ':' + JSON.stringify(x.errors) : '')) }))
+    } catch {}
     const msgs = parsearMensajes(body, env.WA_PHONE_NUMBER_ID).filter((m) => {
       if (vistos.has(m.id)) return false
       vistos.add(m.id)
