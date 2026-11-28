@@ -123,7 +123,7 @@ test('tools: buscar_productos y luego tomar_pedido guarda en KV y manda resumen 
   const body = f.enviados[0].text.body
   assert.match(body, /WA-\d{6}-/)
   assert.match(body, /₡5\.000/)
-  assert.match(body, /8769-2109/)
+  assert.match(body, /8795-9148/)
   assert.match(body, /Envío:\* gratis/)
   const pedidos = [...e.CHATS.m.keys()].filter((k) => k.startsWith('pedido:'))
   assert.equal(pedidos.length, 1)
