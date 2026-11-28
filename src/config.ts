@@ -19,7 +19,7 @@ export const config = {
 
   // SINPE Móvil: poné el número cuando esté confirmado (ej.: '8888-8888').
   // Mientras numero sea '' la app muestra "número SINPE por confirmar".
-  sinpe: { numero: '8769-2109' as string, numeroIntl: '87692109', nombre: 'José Gabriel Arias Rojas' },
+  sinpe: { numero: '8795-9148' as string, numeroIntl: '87959148', nombre: 'José Gabriel Arias Rojas' },
 
   // Margen global (%) que se suma al precio de la foto del catálogo S&F.
   // 0 = mismo precio de la foto. Ej.: 15 suma un 15 % y redondea a ₡50.
